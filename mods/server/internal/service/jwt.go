@@ -9,7 +9,7 @@ import (
 )
 
 type JWT struct {
-	logger     *zap.Logger
+	*zap.Logger
 	signingKey []byte
 }
 type Claims struct {
@@ -62,7 +62,7 @@ type JwtServiceParam struct {
 
 func NewJWTService(param JwtServiceParam) *JWT {
 	return &JWT{
-		logger:     param.Logger,
+		Logger:     param.Logger,
 		signingKey: param.SigningKey,
 	}
 }

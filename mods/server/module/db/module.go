@@ -2,7 +2,9 @@ package db
 
 import (
 	"github.com/samber/lo"
+	"github.com/sony/sonyflake"
 	"go.uber.org/fx"
+	"go.uber.org/zap"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
 	"log"
@@ -12,7 +14,10 @@ import (
 	"time"
 )
 
-var Module = fx.Module("db", fx.Provide(newDatabase, snowFlakeGenerator), fx.Invoke(databaseLifecycle))
+var Module = fx.Module("db",
+	fx.Provide(newDatabase, snowFlakeGenerator),
+	fx.Invoke(databaseLifecycle, registerSnowflakeCallback),
+)
 
 func newDatabase(config *model.DatabaseConfig) *gorm.DB {
 	connection := lo.Must1(config.GetConnection())
@@ -30,6 +35,16 @@ func newDatabase(config *model.DatabaseConfig) *gorm.DB {
 		Logger: newLogger,
 	}))
 	return db
+}
+
+func registerSnowflakeCallback(db *gorm.DB, s *sonyflake.Sonyflake, logger2 *zap.Logger) error {
+	return db.Callback().Create().Before("gorm:create").Register("snowflake", func(db *gorm.DB) {
+		err := fillSnowflake(db, s)
+		if err != nil {
+			logger2.Error(err.Error())
+			return
+		}
+	})
 }
 
 func databaseLifecycle(db *gorm.DB) error {

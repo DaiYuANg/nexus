@@ -9,30 +9,30 @@ import (
 )
 
 type User struct {
-	userService *service.User
-	authService *service.Auth
-	logger      *zap.Logger
+	*service.User
+	*service.Auth
+	*zap.Logger
 }
 
 func (r User) register(context *fiber.Ctx) error {
 	registerUser := model.RegisterUser{}
 	err := context.BodyParser(&registerUser)
-	r.logger.Debug("Param", zap.Any("Body", registerUser))
+	r.Debug("Param", zap.Any("Body", registerUser))
 	if err != nil {
 		return err
 	}
-	r.userService.Register(registerUser)
+	r.Register(registerUser)
 	return context.Status(200).JSON(model.JustOk())
 }
 
 func (r User) login(context *fiber.Ctx) error {
 	loginUser := model.LoginUser{}
 	err := context.BodyParser(&loginUser)
-	r.logger.Debug("Param", zap.Any("Body", loginUser))
+	r.Debug("Param", zap.Any("Body", loginUser))
 	if err != nil {
 		return err
 	}
-	jwt, err := r.authService.Login(loginUser)
+	jwt, err := r.Login(loginUser)
 	if err != nil {
 		return err
 	}
@@ -56,8 +56,8 @@ func (r User) Routes() []Info {
 
 func NewUserRoute(userService *service.User, logger *zap.Logger, auth *service.Auth) *User {
 	return &User{
-		userService: userService,
-		logger:      logger,
-		authService: auth,
+		User:   userService,
+		Logger: logger,
+		Auth:   auth,
 	}
 }

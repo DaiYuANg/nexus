@@ -2,10 +2,13 @@ package server
 
 import (
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/filesystem"
 	"github.com/samber/lo"
 	"go.uber.org/fx"
 	"go.uber.org/zap"
+	"net/http"
 	"nexus/internal/route"
+	"nexus/web"
 )
 
 var RouteModule = fx.Module("route",
@@ -58,4 +61,13 @@ func registerRoute(param RegisterJwtRouteParam) {
 			}
 		},
 	)
+}
+
+func registerUI(app *fiber.App) {
+	app.Use("/", filesystem.New(filesystem.Config{
+		Root:       http.FS(web.Content),
+		Index:      "index.html",
+		PathPrefix: "dist",
+		Browse:     true,
+	}))
 }

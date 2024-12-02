@@ -2,10 +2,8 @@ package cmd
 
 import (
 	"context"
-	"fmt"
 	"github.com/spf13/cobra"
 	"go.uber.org/fx"
-	"os"
 )
 
 var container *fx.App
@@ -23,9 +21,6 @@ var rootCmd = &cobra.Command{
 	},
 }
 
-func Execute() {
-	if err := rootCmd.Execute(); err != nil {
-		fmt.Fprintln(os.Stderr, err)
-		os.Exit(1)
-	}
+func Execute() error {
+	return rootCmd.Execute()
 }

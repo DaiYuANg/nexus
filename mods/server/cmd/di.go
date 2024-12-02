@@ -14,6 +14,7 @@ import (
 	"nexus/module/minio"
 	"nexus/module/plugin"
 	print2 "nexus/module/print"
+	"nexus/module/repository"
 	"nexus/module/schedule"
 	"nexus/module/server"
 	"nexus/module/service"
@@ -26,6 +27,7 @@ func newDiContainer() *fx.App {
 		server.HttpModule,
 		server.RouteModule,
 		jwt.Module,
+		repository.Module,
 		service.Module,
 		schedule.Module,
 		event.Module,

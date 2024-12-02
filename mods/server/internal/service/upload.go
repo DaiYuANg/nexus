@@ -9,8 +9,8 @@ import (
 )
 
 type Upload struct {
-	client *minio.Client
-	logger *zap.Logger
+	*minio.Client
+	*zap.Logger
 }
 
 func (u Upload) UploadFile(ctx context.Context, file *multipart.FileHeader) error {
@@ -24,13 +24,13 @@ func (u Upload) UploadFile(ctx context.Context, file *multipart.FileHeader) erro
 	//if err != nil {
 	//	return err
 	//}
-	u.client.PutObject(ctx, constant.Major, file.Filename, fileSource, file.Size, minio.PutObjectOptions{})
+	u.PutObject(ctx, constant.Major, file.Filename, fileSource, file.Size, minio.PutObjectOptions{})
 	return nil
 }
 
 func NewUpload(client *minio.Client, logger *zap.Logger) *Upload {
 	return &Upload{
-		client: client,
-		logger: logger,
+		Client: client,
+		Logger: logger,
 	}
 }

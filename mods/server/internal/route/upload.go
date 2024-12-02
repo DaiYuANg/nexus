@@ -7,29 +7,20 @@ import (
 )
 
 type Upload struct {
-	logger        *zap.Logger
-	uploadService *service.Upload
+	*zap.Logger
+	*service.Upload
 }
 
 func (u *Upload) SingleFile(c *fiber.Ctx) error {
 	// 获取上传的文件
 	file, err := c.FormFile("file")
 	if err != nil {
-		u.logger.Error(err.Error())
+		u.Error(err.Error())
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 			"error": "File upload failed",
 		})
 	}
-	u.uploadService.UploadFile(c.Context(), file)
-	//// 打印文件名
-	//src, err := file.Open()
-	//if err != nil {
-	//	return c.Status(fiber.StatusInternalServerError).SendString("Failed to open file")
-	//}
-	//defer src.Close()
-	//fmt.Println("Received file:", file.Filename)
-	//_, err = u.client.PutObject(c.Context(), constant.Major, file.Filename, src, file.Size, minio.PutObjectOptions{})
-	// 返回成功的响应
+	u.UploadFile(c.Context(), file)
 	return c.JSON(fiber.Map{
 		"message":  "File uploaded successfully",
 		"filename": file.Filename,
@@ -51,7 +42,7 @@ func NewUpload(
 	uploadService *service.Upload,
 ) *Upload {
 	return &Upload{
-		logger:        logger,
-		uploadService: uploadService,
+		Logger: logger,
+		Upload: uploadService,
 	}
 }

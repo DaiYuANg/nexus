@@ -9,26 +9,32 @@ import (
 	"nexus/internal/constant"
 	"nexus/internal/entity"
 	"nexus/internal/model"
+	"nexus/internal/repository"
 )
 
 type User struct {
-	db       *gorm.DB
-	logger   *zap.Logger
-	eventbus goeventbus.EventBus
+	db *gorm.DB
+	*repository.UserRepository
+	*zap.Logger
+	goeventbus.EventBus
 }
 
-func (s *User) Register(registerUser model.RegisterUser) {
+func (s *User) Register(registerUser model.RegisterUser) error {
 	user := entity.User{}
 	err := copier.Copy(&user, &registerUser)
-	s.logger.Info("Copied", zap.Any("registerUser", user))
+	s.Info("Copied", zap.Any("registerUser", user))
 	if err != nil {
-		return
+		return err
 	}
 
-	s.db.Create(&user)
+	err = s.Create(&user)
+	if err != nil {
+		return err
+	}
 	options := goeventbus.NewMessageOptions().SetHeaders(goeventbus.Headers{})
 	message := goeventbus.CreateMessage().SetOptions(options).SetBody(user)
-	s.eventbus.Channel(constant.UserRegistered).Publisher().Publish(message)
+	s.Channel(constant.UserRegistered).Publisher().Publish(message)
+	return nil
 }
 
 type UserServiceParam struct {
@@ -36,12 +42,14 @@ type UserServiceParam struct {
 	EventBus goeventbus.EventBus
 	DB       *gorm.DB
 	Logger   *zap.Logger
+	UserRepo *repository.UserRepository
 }
 
 func NewUserService(param UserServiceParam) *User {
 	return &User{
-		db:       param.DB,
-		logger:   param.Logger,
-		eventbus: param.EventBus,
+		db:             param.DB,
+		Logger:         param.Logger,
+		EventBus:       param.EventBus,
+		UserRepository: param.UserRepo,
 	}
 }

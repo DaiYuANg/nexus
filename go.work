@@ -1,4 +1,7 @@
 go 1.23
 
-use mods/server
-use mods/pkg
+use (
+	mods/server
+	mods/pkg
+	packages/web
+)

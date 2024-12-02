@@ -6,9 +6,13 @@ import (
 	"github.com/samber/lo"
 	"go.uber.org/fx"
 	"go.uber.org/zap"
+	"nexus/internal/schedule_task"
 )
 
-var Module = fx.Module("schedule", fx.Provide(newScheduler), fx.Invoke(startScheduler))
+var Module = fx.Module("schedule",
+	fx.Provide(newScheduler),
+	fx.Invoke(startScheduler, schedule_task.Scan),
+)
 
 func newScheduler() gocron.Scheduler {
 	return lo.Must(

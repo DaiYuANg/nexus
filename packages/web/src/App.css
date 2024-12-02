@@ -1,5 +1,16 @@
-@import '@fontsource/roboto/300.css';
-@import '@fontsource/roboto/400.css';
-@import '@fontsource/roboto/500.css';
-@import '@fontsource/roboto/700.css';
+@import '@mantine/core/styles.css';
+@import '@mantine/dropzone/styles.css';
+@import '@mantine/notifications/styles.css';
+@import '@mantine/spotlight/styles.css';
+@import '@mantine/nprogress/styles.css';
 
+@layer tailwind-base,tailwind-utilities;
+
+@layer tailwind-base {
+  @tailwind base;
+}
+
+@layer tailwind-utilities {
+  @tailwind components;
+  @tailwind utilities;
+}

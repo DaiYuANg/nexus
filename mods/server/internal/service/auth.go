@@ -7,16 +7,16 @@ import (
 )
 
 type Auth struct {
-	jwt    *JWT
-	logger *zap.Logger
+	*JWT
+	*zap.Logger
 }
 
 func (s *Auth) Login(loginUser model.LoginUser) (string, error) {
-	sign, err := s.jwt.Sign("test")
+	sign, err := s.Sign("test")
 	if err != nil {
 		return "", err
 	}
-	s.logger.Info("sign", zap.String("sign", sign))
+	s.Info("sign", zap.String("sign", sign))
 	return sign, nil
 }
 
@@ -28,7 +28,7 @@ type AuthParam struct {
 
 func NewAuth(param AuthParam) *Auth {
 	return &Auth{
-		jwt:    param.Jwt,
-		logger: param.Logger,
+		JWT:    param.Jwt,
+		Logger: param.Logger,
 	}
 }
