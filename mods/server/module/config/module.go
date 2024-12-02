@@ -39,7 +39,6 @@ func parseConfig(params ParseParams) ParseConfigResult {
 	k := params.K
 	lo.Must0(k.Load(structs.Provider(defaultConfig, "default"), nil))
 	lo.Must0(k.Load(env.Provider(EnvPrefix, ".", func(s string) string {
-		println(s)
 		return strings.Replace(strings.ToLower(
 			strings.TrimPrefix(s, EnvPrefix)), "_", ".", -1)
 	}), nil))

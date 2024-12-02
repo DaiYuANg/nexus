@@ -5,4 +5,11 @@ import (
 	"nexus/internal/service"
 )
 
-var Module = fx.Module("service", fx.Provide(service.NewJWTService, service.NewUserService))
+var Module = fx.Module("service",
+	fx.Provide(
+		service.NewJWTService,
+		service.NewUserService,
+		service.NewUpload,
+		service.NewAuth,
+	),
+)

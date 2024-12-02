@@ -1,0 +1,33 @@
+# https://taskfile.dev
+
+version: '3'
+
+
+vars:
+  OUTPUT: output
+  BINARY_WINDOWS: nexus.exe
+  BINARY_UNIX: nexus
+  AIR: github.com/air-verse/air@latest
+
+tasks:
+  default:
+    cmds:
+      - go build -ldflags "-s -w" -o {{.OUTPUT}}/{{.BINARY_WINDOWS}}
+    silent: true
+
+  linux:
+    cmds:
+      - GOOS=linux GOARCH=amd64 go build -ldflags "-s -w" -o {{.OUTPUT}}/{{.BINARY_UNIX}}
+
+  macos:
+    cmds:
+      - GOOS=darwin GOARCH=arm64 go build -ldflags "-s -w" -o {{.OUTPUT}}/{{.BINARY_UNIX}}
+
+  clean:
+    cmds:
+      - rm -rf ui/dist
+      - rm -rf output
+
+  dev:
+    cmds:
+      - go run {{.AIR}}

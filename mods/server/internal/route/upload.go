@@ -1,27 +1,34 @@
 package route
 
 import (
-	"fmt"
 	"github.com/gofiber/fiber/v2"
-	"github.com/minio/minio-go/v7"
 	"go.uber.org/zap"
+	"nexus/internal/service"
 )
 
 type Upload struct {
-	client *minio.Client
-	logger *zap.Logger
+	logger        *zap.Logger
+	uploadService *service.Upload
 }
 
-func (u Upload) SingleFile(c *fiber.Ctx) error {
+func (u *Upload) SingleFile(c *fiber.Ctx) error {
 	// 获取上传的文件
 	file, err := c.FormFile("file")
 	if err != nil {
+		u.logger.Error(err.Error())
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 			"error": "File upload failed",
 		})
 	}
-	// 打印文件名
-	fmt.Println("Received file:", file.Filename)
+	u.uploadService.UploadFile(c.Context(), file)
+	//// 打印文件名
+	//src, err := file.Open()
+	//if err != nil {
+	//	return c.Status(fiber.StatusInternalServerError).SendString("Failed to open file")
+	//}
+	//defer src.Close()
+	//fmt.Println("Received file:", file.Filename)
+	//_, err = u.client.PutObject(c.Context(), constant.Major, file.Filename, src, file.Size, minio.PutObjectOptions{})
 	// 返回成功的响应
 	return c.JSON(fiber.Map{
 		"message":  "File uploaded successfully",
@@ -29,10 +36,22 @@ func (u Upload) SingleFile(c *fiber.Ctx) error {
 	})
 }
 
-func (Upload) Routes() []Info {
-	return []Info{}
+func (u *Upload) Routes() []Info {
+	return []Info{
+		{
+			Path:    "/upload",
+			Method:  fiber.MethodPost,
+			Handler: u.SingleFile,
+		},
+	}
 }
 
-func NewUpload(client *minio.Client) Upload {
-	return Upload{client: client}
+func NewUpload(
+	logger *zap.Logger,
+	uploadService *service.Upload,
+) *Upload {
+	return &Upload{
+		logger:        logger,
+		uploadService: uploadService,
+	}
 }

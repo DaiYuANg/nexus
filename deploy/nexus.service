@@ -1,0 +1,27 @@
+[Unit]
+Description=nexus
+After=network.target
+
+[Service]
+# 服务执行的二进制文件路径
+ExecStart=/opt/nexus/run.sh
+
+# 设置工作目录（可选）
+#WorkingDirectory=/opt/nexus
+
+# 如果服务崩溃，重启服务
+Restart=on-failure
+RestartSec=5s
+
+# 设置服务的用户和组（确保有权限运行）
+User=root
+Group=root
+
+# 设置日志输出到标准输出
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=nexus
+
+[Install]
+# 服务目标，设置为多用户目标以便在启动时启动服务
+WantedBy=multi-user.target

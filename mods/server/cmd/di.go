@@ -9,6 +9,7 @@ import (
 	"nexus/module/db"
 	"nexus/module/email"
 	"nexus/module/event"
+	"nexus/module/jwt"
 	"nexus/module/logger"
 	"nexus/module/minio"
 	"nexus/module/plugin"
@@ -24,6 +25,7 @@ func newDiContainer() *fx.App {
 		logger.Module,
 		server.HttpModule,
 		server.RouteModule,
+		jwt.Module,
 		service.Module,
 		schedule.Module,
 		event.Module,

@@ -9,7 +9,8 @@ import (
 )
 
 type User struct {
-	userService *service.UserService
+	userService *service.User
+	authService *service.Auth
 	logger      *zap.Logger
 }
 
@@ -24,6 +25,20 @@ func (r User) register(context *fiber.Ctx) error {
 	return context.Status(200).JSON(model.JustOk())
 }
 
+func (r User) login(context *fiber.Ctx) error {
+	loginUser := model.LoginUser{}
+	err := context.BodyParser(&loginUser)
+	r.logger.Debug("Param", zap.Any("Body", loginUser))
+	if err != nil {
+		return err
+	}
+	jwt, err := r.authService.Login(loginUser)
+	if err != nil {
+		return err
+	}
+	return context.Status(200).JSON(model.Ok(jwt))
+}
+
 func (r User) Routes() []Info {
 	return []Info{
 		{
@@ -31,12 +46,18 @@ func (r User) Routes() []Info {
 			Method:  http.MethodPost,
 			Handler: r.register,
 		},
+		{
+			Path:    "/user/login",
+			Method:  http.MethodPost,
+			Handler: r.login,
+		},
 	}
 }
 
-func NewUserRoute(userService *service.UserService, logger *zap.Logger) *User {
+func NewUserRoute(userService *service.User, logger *zap.Logger, auth *service.Auth) *User {
 	return &User{
 		userService: userService,
 		logger:      logger,
+		authService: auth,
 	}
 }

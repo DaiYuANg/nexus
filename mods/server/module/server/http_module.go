@@ -26,7 +26,8 @@ func newHttpServer() *fiber.App {
 	app.Use(pprof.New())
 	app.Use(logger.New(logger.Config{
 		// For more options, see the Config section
-		Format: "${pid} ${locals:requestid} ${status} - ${method} ${path}​\n",
+		Format:        "${pid} ${locals:requestid} ${status} - ${method} ${path}​\n",
+		DisableColors: false,
 	}))
 	app.Use(recover.New())
 	prometheus := fiberprometheus.New("my-service-name")
