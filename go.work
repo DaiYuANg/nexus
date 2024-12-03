@@ -4,4 +4,5 @@ use (
 	mods/server
 	mods/pkg
 	packages/web
+	website
 )
