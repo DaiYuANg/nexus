@@ -14,9 +14,10 @@ const (
 )
 
 type Info struct {
-	Method  HTTPMethod
-	Path    string
-	Handler fiber.Handler
+	Method    HTTPMethod
+	Path      string
+	Handler   fiber.Handler
+	PermitAll bool
 }
 
 type Route interface {

@@ -1,5 +1,5 @@
-import { create } from "zustand";
-import { devtools, persist } from "zustand/middleware";
+import { create } from 'zustand';
+import { devtools, persist } from 'zustand/middleware';
 
 interface AuthState {
   token: string | null;
@@ -16,10 +16,10 @@ const useAuthStore = create<AuthState>()(
         clearToken: () => set({ token: null }),
       }),
       {
-        name: "auth-storage",
+        name: 'auth-storage',
       },
     ),
-    { name: "AuthStore" },
+    { name: 'AuthStore' },
   ),
 );
 

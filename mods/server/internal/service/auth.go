@@ -1,34 +1,39 @@
 package service
 
 import (
-	"go.uber.org/fx"
+	"github.com/pkg/errors"
 	"go.uber.org/zap"
+	"nexus/internal/error_code"
 	"nexus/internal/model"
+	"nexus/internal/repository"
 )
 
 type Auth struct {
 	*JWT
 	*zap.Logger
+	*repository.UserRepository
 }
 
-func (s *Auth) Login(loginUser model.LoginUser) (string, error) {
-	sign, err := s.Sign("test")
+func (s *Auth) Login(loginUser model.LoginUser) (*model.UserVerified, error) {
+	user, err := s.FindByEmail(loginUser.Email)
 	if err != nil {
-		return "", err
+		s.Error("FindByEmail", zap.Error(err))
+		return nil, errors.New(error_code.UserNotFound)
 	}
-	s.Info("sign", zap.String("sign", sign))
-	return sign, nil
-}
 
-type AuthParam struct {
-	fx.In
-	Jwt    *JWT
-	Logger *zap.Logger
-}
+	s.Info("User", zap.Any("user", user))
 
-func NewAuth(param AuthParam) *Auth {
-	return &Auth{
-		JWT:    param.Jwt,
-		Logger: param.Logger,
+	sign, err := s.Sign(user.Email)
+	if err != nil {
+		s.Error("Sign", zap.Error(err))
+		return nil, err
 	}
+
+	verified := model.UserVerified{
+		Token:  sign,
+		Email:  user.Email,
+		Avatar: user.Avatar,
+	}
+	s.Info("sign", zap.Any("sign", verified))
+	return &verified, nil
 }

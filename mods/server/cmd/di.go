@@ -9,11 +9,12 @@ import (
 	"nexus/module/db"
 	"nexus/module/email"
 	"nexus/module/event"
+	"nexus/module/fs"
 	"nexus/module/jwt"
 	"nexus/module/logger"
 	"nexus/module/minio"
 	"nexus/module/plugin"
-	print2 "nexus/module/print"
+	"nexus/module/print"
 	"nexus/module/repository"
 	"nexus/module/schedule"
 	"nexus/module/server"
@@ -24,6 +25,7 @@ func newDiContainer() *fx.App {
 	return fx.New(
 		config.Module,
 		logger.Module,
+		fs.Module,
 		server.HttpModule,
 		server.RouteModule,
 		jwt.Module,
@@ -36,10 +38,9 @@ func newDiContainer() *fx.App {
 		cache.Module,
 		fx.WithLogger(func(log *zap.Logger) fxevent.Logger {
 			return &fxevent.ZapLogger{Logger: log}
-		},
-		),
+		}),
 		db.Module,
 		minio.Module,
-		print2.Module,
+		print.Module,
 	)
 }

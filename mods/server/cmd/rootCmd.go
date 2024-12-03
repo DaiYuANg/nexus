@@ -1,7 +1,6 @@
 package cmd
 
 import (
-	"context"
 	"github.com/spf13/cobra"
 	"go.uber.org/fx"
 )
@@ -16,8 +15,8 @@ var rootCmd = &cobra.Command{
 	PreRun: func(cmd *cobra.Command, args []string) {
 		container = newDiContainer()
 	},
-	RunE: func(cmd *cobra.Command, args []string) error {
-		return container.Start(context.Background())
+	Run: func(cmd *cobra.Command, args []string) {
+		container.Run()
 	},
 }
 

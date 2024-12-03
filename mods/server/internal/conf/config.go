@@ -1,4 +1,4 @@
-package model
+package conf
 
 type Config struct {
 	Http     HttpConfig     `koanf:"http"`
@@ -6,6 +6,7 @@ type Config struct {
 	Minio    MinioConfig    `koanf:"minio"`
 	Logging  LoggingConfig  `koanf:"logging"`
 	Email    EmailConfig    `koanf:"email"`
+	File     FileConfig     `koanf:"file"`
 }
 
 type LoggingConfig struct {

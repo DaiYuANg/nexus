@@ -5,26 +5,25 @@ import (
 	"github.com/go-co-op/gocron/v2"
 	"github.com/samber/lo"
 	"go.uber.org/fx"
-	"go.uber.org/zap"
 	"nexus/internal/schedule_task"
 )
 
 var Module = fx.Module("schedule",
 	fx.Provide(newScheduler),
-	fx.Invoke(startScheduler, schedule_task.Scan),
+	fx.Invoke(schedule_task.Scan, startScheduler),
 )
 
 func newScheduler() gocron.Scheduler {
 	return lo.Must(
 		gocron.NewScheduler(
 			gocron.WithLogger(
-				gocron.NewLogger(gocron.LogLevelInfo),
+				gocron.NewLogger(gocron.LogLevelDebug),
 			),
 		),
 	)
 }
 
-func startScheduler(lc fx.Lifecycle, cron gocron.Scheduler, log *zap.Logger) {
+func startScheduler(lc fx.Lifecycle, cron gocron.Scheduler) {
 	lc.Append(fx.Hook{
 		OnStart: func(ctx context.Context) error {
 			go cron.Start()

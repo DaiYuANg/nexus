@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"nexus/internal/model"
 	"nexus/internal/service"
+	"time"
 )
 
 type User struct {
@@ -32,32 +33,27 @@ func (r User) login(context *fiber.Ctx) error {
 	if err != nil {
 		return err
 	}
-	jwt, err := r.Login(loginUser)
+	userVerifyiedVo, err := r.Login(loginUser)
 	if err != nil {
 		return err
 	}
-	return context.Status(200).JSON(model.Ok(jwt))
+	time.Sleep(2 * time.Second)
+	return context.Status(200).JSON(model.Ok(userVerifyiedVo))
 }
 
 func (r User) Routes() []Info {
 	return []Info{
 		{
-			Path:    "/user/register",
-			Method:  http.MethodPost,
-			Handler: r.register,
+			Path:      "/user/register",
+			Method:    http.MethodPost,
+			Handler:   r.register,
+			PermitAll: true,
 		},
 		{
-			Path:    "/user/login",
-			Method:  http.MethodPost,
-			Handler: r.login,
+			Path:      "/user/login",
+			Method:    http.MethodPost,
+			Handler:   r.login,
+			PermitAll: true,
 		},
-	}
-}
-
-func NewUserRoute(userService *service.User, logger *zap.Logger, auth *service.Auth) *User {
-	return &User{
-		User:   userService,
-		Logger: logger,
-		Auth:   auth,
 	}
 }

@@ -28,8 +28,13 @@ var RouteModule = fx.Module("route",
 			fx.As(new(route.Route)),
 			fx.ResultTags(route.Tag),
 		),
+		fx.Annotate(
+			route.NewFileRoute,
+			fx.As(new(route.Route)),
+			fx.ResultTags(route.Tag),
+		),
 	),
-	fx.Invoke(registerRoute),
+	fx.Invoke(registerRoute, registerUI),
 )
 
 type RegisterJwtRouteParam struct {

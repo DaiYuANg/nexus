@@ -3,7 +3,6 @@ package service
 import (
 	"fmt"
 	"github.com/golang-jwt/jwt/v5"
-	"go.uber.org/fx"
 	"go.uber.org/zap"
 	"time"
 )
@@ -22,7 +21,7 @@ func (s *JWT) Sign(userID string) (string, error) {
 	claims := Claims{
 		UserID: userID,
 		RegisteredClaims: jwt.RegisteredClaims{
-			Issuer:    "myapp",                                            // JWT的发行者
+			Issuer:    "nexus",                                            // JWT的发行者
 			Subject:   "user authentication",                              // JWT的主题
 			IssuedAt:  jwt.NewNumericDate(time.Now()),                     // 发行时间
 			ExpiresAt: jwt.NewNumericDate(time.Now().Add(time.Hour * 24)), // 过期时间（24小时后）
@@ -52,17 +51,4 @@ func (s *JWT) Parse(tokenString string) (*jwt.Token, error) {
 		return nil, err
 	}
 	return token, nil
-}
-
-type JwtServiceParam struct {
-	fx.In
-	SigningKey []byte `name:"jwtKey"`
-	Logger     *zap.Logger
-}
-
-func NewJWTService(param JwtServiceParam) *JWT {
-	return &JWT{
-		Logger:     param.Logger,
-		signingKey: param.SigningKey,
-	}
 }

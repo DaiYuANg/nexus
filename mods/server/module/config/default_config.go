@@ -2,17 +2,25 @@ package config
 
 import (
 	"github.com/adrg/xdg"
-	"nexus/internal/model"
+	"github.com/samber/lo"
+	"nexus/internal/conf"
+	"os"
 	"path"
 )
 
-var defaultConfig = model.Config{
-	Http: model.HttpConfig{Port: "3000"},
-	Database: model.DatabaseConfig{
-		Type: "sqlite",
-		Path: path.Join(xdg.CacheHome, "nexus.db"),
-	},
-	Logging: model.LoggingConfig{
-		Path: path.Join(xdg.CacheHome, "nexus.log"),
-	},
+func defaultConfig() conf.Config {
+	pwd := lo.Must(os.Getwd())
+	return conf.Config{
+		Http: conf.HttpConfig{Port: "3000"},
+		Database: conf.DatabaseConfig{
+			Type: "sqlite",
+			Path: path.Join(xdg.CacheHome, "nexus.db"),
+		},
+		Logging: conf.LoggingConfig{
+			Path: path.Join(xdg.CacheHome, "nexus.log"),
+		},
+		File: conf.FileConfig{
+			Path: path.Join(pwd, "nexus"),
+		},
+	}
 }

@@ -1,4 +1,4 @@
-package model
+package conf
 
 type MinioConfig struct {
 	Endpoint  string `json:"endpoint" koanf:"endpoint"`

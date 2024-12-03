@@ -7,4 +7,6 @@ type FileResource struct {
 	Md5    string
 	Bucket string
 	Object string
+	Mime   string
+	Size   int64
 }

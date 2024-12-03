@@ -1,12 +1,21 @@
-import {Result} from "../type/result.ts";
-import {req} from "./req.ts";
+import { Result } from '../type/result.ts';
+import { req } from './req.ts';
 
 type loginForm = {
-  email: string,
-  password: string,
-}
-const login = (form: loginForm): Promise<Result<string>> => {
-  return req.post("/user/login", form)
-}
+  email: string;
+  password: string;
+};
 
-export {login}
+type loginResponse = {
+  token: string;
+  email: string;
+  avatar: string;
+};
+
+const login = (form: loginForm): Promise<Result<loginResponse>> => {
+  return req.post('/user/login', form);
+};
+
+export { login };
+
+export type { loginResponse, loginForm };

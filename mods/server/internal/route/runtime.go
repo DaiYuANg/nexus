@@ -22,7 +22,3 @@ func (r Runtime) Routes() []Info {
 		},
 	}
 }
-
-func NewRuntimeRoute() *Runtime {
-	return &Runtime{}
-}

@@ -1,24 +1,28 @@
-import axios from "axios";
-import {nprogress} from "@mantine/nprogress";
+import axios from 'axios';
+import { nprogress } from '@mantine/nprogress';
+import { useAuthStore } from '../store/useAuthStore.ts';
 
 const req = axios.create({
-  baseURL: '/api'
-})
+  baseURL: '/api',
+});
+const state = useAuthStore.getState();
 // 请求拦截器
-axios.interceptors.request.use(
+req.interceptors.request.use(
   (config) => {
-    nprogress.set(50)
+    config.headers['Authorization'] = 'Bearer ' + state.token;
+    nprogress.set(30);
     return config;
   },
   (error) => {
-    nprogress.reset();    // 重置进度条
+    nprogress.reset(); // 重置进度条
     return Promise.reject(error);
-  }
+  },
 );
 
 req.interceptors.response.use((resp) => {
-  nprogress.set(100)
+  nprogress.complete();
+  nprogress.cleanup();
   return resp.data;
-})
+});
 
-export {req}
+export { req };

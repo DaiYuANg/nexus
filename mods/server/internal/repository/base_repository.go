@@ -11,11 +11,6 @@ type BaseRepository[T any] struct {
 	*zap.Logger
 }
 
-// NewBaseRepository 创建一个新的 BaseRepository 实例
-func NewBaseRepository[T any](db *gorm.DB, logger *zap.Logger) *BaseRepository[T] {
-	return &BaseRepository[T]{DB: db, Logger: logger}
-}
-
 // Create 用于创建一个新的实体
 func (r *BaseRepository[T]) Create(entity *T) error {
 	r.Info("Create", zap.Any("entity", entity))

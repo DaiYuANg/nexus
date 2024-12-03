@@ -13,7 +13,6 @@ func BuildRuntimeInfo() *SystemInfo {
 	cpuUsage, _ := cpu.Percent(0, false)
 	//cpuFreq, _ := cpu.Info()
 	cpuCount, _ := cpu.Counts(false)
-
 	// 示例：获取内存信息
 	memStats, _ := mem.VirtualMemory()
 

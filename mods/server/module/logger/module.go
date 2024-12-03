@@ -5,7 +5,7 @@ import (
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 	"gopkg.in/natefinch/lumberjack.v2"
-	"nexus/internal/model"
+	"nexus/internal/conf"
 	"os"
 )
 
@@ -13,7 +13,7 @@ var Module = fx.Module("logger", fx.Provide(newLogger))
 
 type Params struct {
 	fx.In
-	Config *model.LoggingConfig
+	Config *conf.LoggingConfig
 }
 
 func newLogger(params Params) *zap.Logger {

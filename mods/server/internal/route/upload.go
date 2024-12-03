@@ -36,13 +36,3 @@ func (u *Upload) Routes() []Info {
 		},
 	}
 }
-
-func NewUpload(
-	logger *zap.Logger,
-	uploadService *service.Upload,
-) *Upload {
-	return &Upload{
-		Logger: logger,
-		Upload: uploadService,
-	}
-}

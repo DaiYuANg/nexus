@@ -19,12 +19,14 @@ type newScanParams struct {
 func Scan(params newScanParams) error {
 	_, err := params.NewJob(
 		gocron.DurationJob(
-			10*time.Second,
+			60*time.Second,
 		),
 		gocron.NewTask(
 			func() {
 				bucket, err := params.ListBucket()
+				params.Info("test")
 				if err != nil {
+					params.Error("failed to list bucket", zap.Error(err))
 					return
 				}
 				lo.ForEach(bucket, func(item string, index int) {

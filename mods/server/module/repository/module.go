@@ -5,4 +5,12 @@ import (
 	"nexus/internal/repository"
 )
 
-var Module = fx.Module("repository", fx.Provide(repository.NewUserRepository))
+var Module = fx.Module("repository",
+	fx.Provide(
+		repository.NewUserRepository,
+		repository.NewFileResourceRepository,
+		repository.NewFolderRepository,
+		repository.NewFileRepository,
+		repository.NewUserGroupRepository,
+	),
+)

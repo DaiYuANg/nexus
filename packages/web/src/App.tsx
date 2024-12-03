@@ -1,11 +1,9 @@
-import {RouterProvider} from "react-router";
-import {router} from "./router";
+import { RouterProvider } from 'react-router';
+import { router } from './router';
+import './i18n.ts';
 
 const App = () => {
-  console.log(123)
-  return (
-    <RouterProvider router={router}/>
-  );
+  return <RouterProvider router={router} />;
 };
 
-export {App}
+export { App };

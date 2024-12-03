@@ -8,8 +8,8 @@ import (
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
 	"log"
+	"nexus/internal/conf"
 	"nexus/internal/entity"
-	"nexus/internal/model"
 	"os"
 	"time"
 )
@@ -19,7 +19,7 @@ var Module = fx.Module("db",
 	fx.Invoke(databaseLifecycle, registerSnowflakeCallback),
 )
 
-func newDatabase(config *model.DatabaseConfig) *gorm.DB {
+func newDatabase(config *conf.DatabaseConfig) *gorm.DB {
 	connection := lo.Must1(config.GetConnection())
 	newLogger := logger.New(
 		log.New(os.Stdout, "\r\n", log.LstdFlags), // io writer
@@ -51,5 +51,8 @@ func databaseLifecycle(db *gorm.DB) error {
 	return db.AutoMigrate(
 		&entity.User{},
 		&entity.FileResource{},
+		&entity.File{},
+		&entity.Folder{},
+		&entity.UserGroup{},
 	)
 }

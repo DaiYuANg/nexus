@@ -1,4 +1,4 @@
-package model
+package conf
 
 type EmailConfig struct {
 }

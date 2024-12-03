@@ -7,6 +7,7 @@ import (
 	"nexus/internal/constant"
 	"nexus/internal/entity"
 	"nexus/internal/minio"
+	"nexus/internal/repository"
 )
 
 type UserRegisteredConsumerParam struct {
@@ -14,6 +15,11 @@ type UserRegisteredConsumerParam struct {
 	goeventbus.EventBus
 	*zap.Logger
 	*minio.Wrapper
+	*repository.FolderRepository
+}
+
+type UserConsumer interface {
+	Consumer(user entity.User)
 }
 
 func UserRegisteredConsumer(param UserRegisteredConsumerParam) {
