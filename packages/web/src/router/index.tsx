@@ -1,6 +1,7 @@
 import { createBrowserRouter } from 'react-router';
 import { Layout } from '../component';
 import { CalendarScreen, Chat, File, Flow, Login } from '../page';
+import { NothingFound } from '../page/error/NothingFound.tsx';
 
 const router = createBrowserRouter([
   {
@@ -29,6 +30,10 @@ const router = createBrowserRouter([
       },
     ],
   },
+  {
+    path: '/admin',
+  },
+  { path: '/*', element: <NothingFound /> },
 ]);
 
 export { router };

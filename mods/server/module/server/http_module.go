@@ -8,6 +8,7 @@ import (
 
 var HttpModule = fx.Module("http",
 	fx.Provide(newHttpServer),
+	websocket,
 	middleware,
 	fx.Invoke(
 		httpLifecycle,

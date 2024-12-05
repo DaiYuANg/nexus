@@ -4,9 +4,10 @@ import TurboConsole from 'unplugin-turbo-console/vite';
 import { visualizer } from 'rollup-plugin-visualizer';
 import { compression } from 'vite-plugin-compression2';
 import tsconfigPaths from 'vite-tsconfig-paths';
-import * as os from 'node:os';
 import { VitePWA } from 'vite-plugin-pwa';
+
 const mode = process.env.NODE_ENV;
+console.log(import.meta);
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [
@@ -49,21 +50,17 @@ export default defineConfig({
       clientFiles: ['./src/components/*/*.tsx', './src/page/*/**.tsx'],
     },
     open: true,
-    ...(os.platform() === 'darwin'
-      ? {
-          proxy: {
-            '/api': {
-              target: 'http://localhost:8080',
-              changeOrigin: true,
-              configure: (proxy, options) => {
-                proxy.on('proxyReq', (proxyReq, _req, _res) => {
-                  proxyReq.setHeader('origin', 'http://localhost:8080');
-                  console.log('Sending Request to the Target:', options.target + proxyReq.path);
-                });
-              },
-            },
-          },
-        }
-      : {}),
+    proxy: {
+      '/api': {
+        target: 'http://localhost:8080',
+        changeOrigin: true,
+        configure: (proxy, options) => {
+          proxy.on('proxyReq', (proxyReq, _req, _res) => {
+            proxyReq.setHeader('origin', 'http://localhost:8080');
+            console.log('Sending Request to the Target:', options.target + proxyReq.path);
+          });
+        },
+      },
+    },
   },
 });

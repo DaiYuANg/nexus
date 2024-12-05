@@ -37,14 +37,14 @@ var RouteModule = fx.Module("route",
 	fx.Invoke(registerRoute, registerUI),
 )
 
-type RegisterJwtRouteParam struct {
+type RegisterRouteParam struct {
 	fx.In
 	Engine *fiber.App
 	Routes []route.Route `group:"route"`
 	Logger *zap.Logger
 }
 
-func registerRoute(param RegisterJwtRouteParam) {
+func registerRoute(param RegisterRouteParam) {
 	log, engine, routes := param.Logger, param.Engine, param.Routes
 	log.Info("Routes:", zap.Any("Routes", routes))
 	routeInfos := lo.FlatMap[route.Route, route.Info](routes, func(item route.Route, index int) []route.Info {

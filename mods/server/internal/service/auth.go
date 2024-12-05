@@ -33,6 +33,7 @@ func (s *Auth) Login(loginUser model.LoginUser) (*model.UserVerified, error) {
 		Token:  sign,
 		Email:  user.Email,
 		Avatar: user.Avatar,
+		UserId: user.Id2String(),
 	}
 	s.Info("sign", zap.Any("sign", verified))
 	return &verified, nil

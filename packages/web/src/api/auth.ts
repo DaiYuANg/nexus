@@ -10,6 +10,7 @@ type loginResponse = {
   token: string;
   email: string;
   avatar: string;
+  userId: string;
 };
 
 const login = (form: loginForm): Promise<Result<loginResponse>> => {

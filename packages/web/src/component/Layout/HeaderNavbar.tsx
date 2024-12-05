@@ -1,70 +1,30 @@
 import { ActionIcon, ActionIconGroup } from '@mantine/core';
-import {
-  IconCalendar,
-  IconFolder,
-  IconLayoutDashboard,
-  IconMessage2,
-  IconPhoto,
-  IconShape2,
-  IconTimeline,
-} from '@tabler/icons-react';
 import { useNavigate } from 'react-router';
+import type { HeaderNav } from './HeaderNavDefine.tsx';
+import { HeaderNavDefine } from './HeaderNavDefine.tsx';
 
-const HeaderNavbar = () => {
+type HeaderNavProps = {} & HeaderNav;
+
+const HeaderNav = ({ path, icon }: HeaderNavProps) => {
   const navigate = useNavigate();
   return (
+    <ActionIcon
+      onClick={() => {
+        navigate(path);
+      }}
+      variant={'transparent'}
+    >
+      {icon}
+    </ActionIcon>
+  );
+};
+
+const HeaderNavbar = () => {
+  return (
     <ActionIconGroup>
-      <ActionIcon variant={'transparent'}>
-        <IconLayoutDashboard />
-      </ActionIcon>
-      <ActionIcon
-        onClick={() => {
-          navigate('/file');
-        }}
-        variant={'transparent'}
-      >
-        <IconFolder />
-      </ActionIcon>
-      <ActionIcon
-        onClick={() => {
-          navigate('/chat');
-        }}
-        variant={'transparent'}
-      >
-        <IconMessage2 />
-      </ActionIcon>
-      <ActionIcon
-        onClick={() => {
-          navigate('/flow');
-        }}
-        variant={'transparent'}
-      >
-        <IconShape2 />
-      </ActionIcon>
-      <ActionIcon
-        onClick={() => {
-          navigate('/flow');
-        }}
-        variant={'transparent'}
-      >
-        <IconTimeline />
-      </ActionIcon>
-      <ActionIcon
-        onClick={() => {
-          navigate('/flow');
-        }}
-        variant={'transparent'}
-      >
-        <IconPhoto />
-      </ActionIcon>
-      <ActionIcon
-        onClick={() => {
-          navigate('/calendar');
-        }}
-        variant={'transparent'}
-      >
-        <IconCalendar />
-      </ActionIcon>
+      {HeaderNavDefine.map((item, index) => (
+        <HeaderNav key={index} {...item} />
+      ))}
     </ActionIconGroup>
   );
 };

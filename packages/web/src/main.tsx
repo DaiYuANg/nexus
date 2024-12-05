@@ -23,7 +23,7 @@ createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <QueryClientProvider client={queryClient}>
       <MantineProvider defaultColorScheme={'auto'} theme={theme} colorSchemeManager={colorSchemeManager}>
-        <Notifications />
+        <Notifications position={'top-right'} />
         <NavigationProgress />
         <ReactQueryDevtools initialIsOpen={false} />
         <ContextMenuProvider>

@@ -6,7 +6,6 @@ import (
 	"net/http"
 	"nexus/internal/model"
 	"nexus/internal/service"
-	"time"
 )
 
 type User struct {
@@ -33,11 +32,12 @@ func (r User) login(context *fiber.Ctx) error {
 	if err != nil {
 		return err
 	}
+
 	userVerifyiedVo, err := r.Login(loginUser)
 	if err != nil {
 		return err
 	}
-	time.Sleep(2 * time.Second)
+
 	return context.Status(200).JSON(model.Ok(userVerifyiedVo))
 }
 

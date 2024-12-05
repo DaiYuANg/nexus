@@ -6,12 +6,14 @@ import {
   IconMessageCircle,
   IconPhoto,
   IconSearch,
-  IconSettings,
+  IconSettings2,
 } from '@tabler/icons-react';
 import { useUserStore } from '../store/useUserStore.tsx';
+import { useNavigate } from 'react-router';
 
 const UserCard = () => {
   const { user, clearUser } = useUserStore();
+  const navigate = useNavigate();
   return (
     <>
       <Menu shadow="md" width={200}>
@@ -26,7 +28,7 @@ const UserCard = () => {
                 </Text>
 
                 <Text c="dimmed" size="xs">
-                  hspoonlicker@outlook.com
+                  {user?.email}
                 </Text>
               </div>
 
@@ -36,8 +38,13 @@ const UserCard = () => {
         </Menu.Target>
 
         <Menu.Dropdown>
-          <Menu.Label>Application</Menu.Label>
-          <Menu.Item leftSection={<IconSettings style={{ width: rem(14), height: rem(14) }} />}>Settings</Menu.Item>
+          <Menu.Label>{user?.email}</Menu.Label>
+          <Menu.Item
+            leftSection={<IconSettings2 style={{ width: rem(14), height: rem(14) }} />}
+            onClick={() => navigate('/settings')}
+          >
+            Settings
+          </Menu.Item>
           <Menu.Item leftSection={<IconMessageCircle style={{ width: rem(14), height: rem(14) }} />}>
             Messages
           </Menu.Item>

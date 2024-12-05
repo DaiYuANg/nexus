@@ -14,4 +14,5 @@ type UserVerified struct {
 	Token  string `json:"token"`
 	Email  string `json:"email"`
 	Avatar string `json:"avatar"`
+	UserId string `json:"userId"`
 }
