@@ -41,4 +41,6 @@ const Flow = () => {
   );
 };
 
+export default Flow;
+
 export { Flow };

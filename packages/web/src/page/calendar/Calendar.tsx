@@ -17,5 +17,5 @@ const CalendarScreen = () => {
     </Box>
   );
 };
-
+export default CalendarScreen;
 export { CalendarScreen };

@@ -21,4 +21,5 @@ const Login = (props: PaperProps) => {
   );
 };
 
+export default Login;
 export { Login };

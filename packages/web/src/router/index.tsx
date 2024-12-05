@@ -1,10 +1,6 @@
 import { createBrowserRouter } from 'react-router';
-import { Login } from '../page/auth/Login.tsx';
-import { Layout } from '../component/Layout.tsx';
-import { File } from '../page/file/File.tsx';
-import { Flow } from '../page/flow/Flow.tsx';
-import { CalendarScreen } from '../page/calendar/Calendar.tsx';
-import { Chat } from '../page/chat/Chat.tsx';
+import { Layout } from '../component';
+import { CalendarScreen, Chat, File, Flow, Login } from '../page';
 
 const router = createBrowserRouter([
   {

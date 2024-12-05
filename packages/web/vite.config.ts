@@ -46,7 +46,7 @@ export default defineConfig({
   },
   server: {
     warmup: {
-      clientFiles: ['./src/components/*.tsx', './src/page/*.tsx'],
+      clientFiles: ['./src/components/*/*.tsx', './src/page/*/**.tsx'],
     },
     open: true,
     ...(os.platform() === 'darwin'

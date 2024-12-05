@@ -4,5 +4,6 @@ use (
 	mods/server
 	mods/pkg
 	packages/web
+	translate
 	website
 )

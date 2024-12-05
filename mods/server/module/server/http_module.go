@@ -2,7 +2,6 @@ package server
 
 import (
 	"github.com/gofiber/fiber/v2"
-
 	"go.uber.org/fx"
 	"go.uber.org/zap"
 )

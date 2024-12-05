@@ -10,6 +10,7 @@ import (
 	"nexus/module/email"
 	"nexus/module/event"
 	"nexus/module/fs"
+	"nexus/module/i18n"
 	"nexus/module/jwt"
 	"nexus/module/logger"
 	"nexus/module/minio"
@@ -41,6 +42,7 @@ func newDiContainer() *fx.App {
 		}),
 		db.Module,
 		minio.Module,
+		i18n.Module,
 		print.Module,
 	)
 }

@@ -10,6 +10,7 @@ import { Notifications } from '@mantine/notifications';
 import { NavigationProgress } from '@mantine/nprogress';
 import { theme } from './theme.ts';
 import { colorSchemeManager } from './colorSchemeManager.ts';
+import { ContextMenuProvider } from 'mantine-contextmenu';
 
 if (import.meta.env.MODE === 'development') {
   scan({
@@ -25,7 +26,9 @@ createRoot(document.getElementById('root')!).render(
         <Notifications />
         <NavigationProgress />
         <ReactQueryDevtools initialIsOpen={false} />
-        <App />
+        <ContextMenuProvider>
+          <App />
+        </ContextMenuProvider>
       </MantineProvider>
     </QueryClientProvider>
   </StrictMode>,

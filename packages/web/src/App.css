@@ -1,10 +1,13 @@
-@import '@mantine/core/styles.css';
+@import '@mantine/core/styles.css' ;
+@import 'mantine-contextmenu/styles.css';
 @import '@mantine/dropzone/styles.css';
 @import '@mantine/notifications/styles.css';
 @import '@mantine/spotlight/styles.css';
 @import '@mantine/nprogress/styles.css';
 
-@layer tailwind-base,tailwind-utilities;
+@layer mantine, mantine-contextmenu;
+
+@layer tailwind-base, tailwind-utilities;
 
 @layer tailwind-base {
   @tailwind base;

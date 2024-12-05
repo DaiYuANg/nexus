@@ -14,6 +14,7 @@ services:
     environment:
       MINIO_ROOT_USER: "nexus"
       MINIO_ROOT_PASSWORD: "nexus_minio_password"
+    restart: always
     ports:
       - "9000:9000"
       - "9001:9001"

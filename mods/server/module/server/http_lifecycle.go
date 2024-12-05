@@ -3,6 +3,7 @@ package server
 import (
 	"context"
 	"github.com/gofiber/fiber/v2"
+	"github.com/samber/lo"
 	"go.uber.org/fx"
 	"go.uber.org/zap"
 	"nexus/internal/conf"
@@ -20,10 +21,7 @@ func httpLifecycle(param LifecycleParam) {
 	param.Append(fx.Hook{
 		OnStart: func(ctx context.Context) error {
 			go func() {
-				err := param.Listen(param.GetPort())
-				if err != nil {
-					param.Error("Start http server failed", zap.Error(err))
-				}
+				lo.Must0(param.Listen(param.GetPort()))
 			}()
 			return nil
 		},
