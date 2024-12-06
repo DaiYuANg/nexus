@@ -3,18 +3,26 @@ package minio
 import (
 	"go.uber.org/fx"
 	"nexus/internal/constant"
-	minio2 "nexus/internal/minio"
+	"nexus/internal/fs"
+	"nexus/vfs/s3"
 )
 
 var Module = fx.Module("minio",
 	fx.Provide(
 		newMinioClient,
 		newMinioAdminClient,
-		minio2.NewWrapper,
+		fs.NewWrapper,
 	),
 	fx.Invoke(checkMajorBucket),
 )
 
-func checkMajorBucket(client *minio2.Wrapper) error {
+func checkMajorBucket(client *fs.Wrapper) error {
+	s3.New(s3.VfsConfig{
+		Logger:    nil,
+		Endpoint:  "",
+		AccessKey: "",
+		SecretKey: "",
+		UseSSL:    false,
+	})
 	return client.CreateBucket(constant.Major)
 }

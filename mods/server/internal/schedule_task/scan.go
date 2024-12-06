@@ -5,7 +5,7 @@ import (
 	"github.com/samber/lo"
 	"go.uber.org/fx"
 	"go.uber.org/zap"
-	"nexus/internal/minio"
+	"nexus/internal/fs"
 	"time"
 )
 
@@ -13,7 +13,7 @@ type newScanParams struct {
 	fx.In
 	*zap.Logger
 	gocron.Scheduler
-	*minio.Wrapper
+	*fs.Wrapper
 }
 
 func Scan(params newScanParams) error {

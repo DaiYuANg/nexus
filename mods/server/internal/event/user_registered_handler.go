@@ -6,7 +6,7 @@ import (
 	"go.uber.org/zap"
 	"nexus/internal/constant"
 	"nexus/internal/entity"
-	"nexus/internal/minio"
+	"nexus/internal/fs"
 	"nexus/internal/repository"
 )
 
@@ -14,7 +14,7 @@ type UserRegisteredConsumerParam struct {
 	fx.In
 	goeventbus.EventBus
 	*zap.Logger
-	*minio.Wrapper
+	*fs.Wrapper
 	*repository.FolderRepository
 }
 

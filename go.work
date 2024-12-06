@@ -6,4 +6,5 @@ use (
 	packages/web
 	translate
 	website
+	mods/vfs
 )
