@@ -5,7 +5,6 @@ import (
 	"github.com/dgraph-io/badger/v4"
 	"github.com/gabriel-vasile/mimetype"
 	"github.com/spf13/afero"
-	"go.uber.org/zap"
 )
 
 func (v *VFS) WriteFile(path string, data []byte) error {
@@ -13,7 +12,7 @@ func (v *VFS) WriteFile(path string, data []byte) error {
 	defer func(file afero.File) {
 		err := file.Close()
 		if err != nil {
-			v.Error("Close", zap.Error(err))
+			v.Error(err)
 		}
 	}(file)
 	if err != nil {

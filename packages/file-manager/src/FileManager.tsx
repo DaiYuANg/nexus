@@ -3,10 +3,11 @@ import { FileManagerProvider } from './FileManagerContext.tsx';
 import { FileManagerToolBar } from './FileManagerToolBar.tsx';
 import { RenderProps } from './type.ts';
 import { LayoutManager } from './LayoutManager.tsx';
+import { ReactElement } from 'react';
 
 type FileManagerProps = {} & RenderProps;
 
-const FileManagerRoot = ({ files }: FileManagerProps) => {
+const FileManager = ({ files }: FileManagerProps): ReactElement => {
   return (
     <FileManagerProvider files={files}>
       <Box>
@@ -18,5 +19,5 @@ const FileManagerRoot = ({ files }: FileManagerProps) => {
   );
 };
 
-export default FileManagerRoot;
+export default FileManager;
 export type { FileManagerProps };

@@ -8,9 +8,8 @@ export default defineConfig({
     react(),
     dts({
       include: ['src/*'],
-      rollupTypes: true,
-      logLevel: 'info',
       insertTypesEntry: true,
+      tsconfigPath: './tsconfig.app.json',
     }),
   ],
   build: {
@@ -18,9 +17,17 @@ export default defineConfig({
     lib: {
       entry: resolve(__dirname, 'src/index.ts'),
       name: 'file-manager',
+      formats: ['es', 'umd'],
     },
     rollupOptions: {
-      external: ['react', 'react-dom', '@mantine/core', '@mantine/hook'],
+      external: ['react', 'react-dom', 'react/jsx-runtime', '@mantine/core', '@mantine/hook'],
+      output: {
+        globals: {
+          react: 'React',
+          'react/jsx-runtime': 'react/jsx-runtime',
+          'react-dom': 'ReactDOM',
+        },
+      },
     },
   },
 });

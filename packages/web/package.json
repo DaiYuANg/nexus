@@ -11,6 +11,7 @@
     "postinstall": "pnpm build"
   },
   "dependencies": {
+    "@nexus/file-manager": "workspace:*",
     "@fontsource/jetbrains-mono": "^5.1.1",
     "@hello-pangea/dnd": "^17.0.0",
     "@mantine/carousel": "^7.14.3",

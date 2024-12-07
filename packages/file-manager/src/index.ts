@@ -1,3 +1,4 @@
-import FileManagerRoot from './FileManagerRoot';
+import FileManager from './FileManager.tsx';
 
-export { FileManagerRoot };
+export type * from './type.ts';
+export { FileManager };

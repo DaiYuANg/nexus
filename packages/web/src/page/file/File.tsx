@@ -1,6 +1,6 @@
 import { Box } from '@mantine/core';
 import { IconFolder } from '@tabler/icons-react';
-import { FileManager } from '../../component';
+import { FileManager } from '@nexus/file-manager';
 
 const folders = [
   { id: '1', name: 'Documents', icon: <IconFolder size={30} />, files: 12 },

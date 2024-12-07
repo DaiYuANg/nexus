@@ -1,3 +1,5 @@
+import { ReactElement } from 'react';
+
 type layout = 'grid' | 'list';
 
 type RenderProps = {
@@ -8,7 +10,7 @@ type FileInfo = {
   id: string;
   name: string;
 } & Partial<{
-  icon: JSX.Element;
+  icon: ReactElement;
   isDir: boolean;
   updateAt: Date;
   size: number;
