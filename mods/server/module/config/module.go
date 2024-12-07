@@ -27,7 +27,7 @@ type ParseConfigResult struct {
 	Config         *conf.Config
 	DatabaseConfig *conf.DatabaseConfig
 	HttpConfig     *conf.HttpConfig
-	MinioConfig    *conf.MinioConfig
+	FileConfig     *conf.FileConfig
 	LoggerConfig   *conf.LoggingConfig
 }
 type ParseParams struct {
@@ -35,13 +35,18 @@ type ParseParams struct {
 	K *koanf.Koanf
 }
 
-func parseConfig(params ParseParams) ParseConfigResult {
+func parseConfig(params ParseParams) (ParseConfigResult, error) {
 	k := params.K
-	lo.Must0(k.Load(structs.Provider(defaultConfig(), "default"), nil))
+	c, err := defaultConfig()
+	if err != nil {
+		return ParseConfigResult{}, nil
+	}
+	lo.Must0(k.Load(structs.Provider(c, "default"), nil))
 	lo.Must0(k.Load(env.Provider(EnvPrefix, ".", func(s string) string {
 		return strings.Replace(strings.ToLower(
 			strings.TrimPrefix(s, EnvPrefix)), "_", ".", -1)
 	}), nil))
+
 	var out conf.Config
 	lo.Must0(k.Unmarshal("", &out), "error unmarshalling config")
 	config := &out
@@ -50,6 +55,6 @@ func parseConfig(params ParseParams) ParseConfigResult {
 		DatabaseConfig: &config.Database,
 		HttpConfig:     &config.Http,
 		LoggerConfig:   &config.Logging,
-		MinioConfig:    &config.Minio,
-	}
+		FileConfig:     &config.File,
+	}, nil
 }

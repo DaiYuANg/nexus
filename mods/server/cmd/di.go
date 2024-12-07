@@ -13,10 +13,10 @@ import (
 	"nexus/module/i18n"
 	"nexus/module/jwt"
 	"nexus/module/logger"
-	"nexus/module/minio"
 	"nexus/module/plugin"
 	"nexus/module/print"
 	"nexus/module/repository"
+	"nexus/module/runtime"
 	"nexus/module/schedule"
 	"nexus/module/server"
 	"nexus/module/service"
@@ -25,6 +25,7 @@ import (
 func newDiContainer() *fx.App {
 	return fx.New(
 		config.Module,
+		runtime.Module,
 		logger.Module,
 		fs.Module,
 		server.HttpModule,
@@ -41,7 +42,7 @@ func newDiContainer() *fx.App {
 			return &fxevent.ZapLogger{Logger: log}
 		}),
 		db.Module,
-		minio.Module,
+		//minio.Module,
 		i18n.Module,
 		print.Module,
 	)

@@ -1,22 +1,23 @@
 package service
 
 import (
-	"github.com/minio/minio-go/v7"
 	"go.uber.org/fx"
 	"go.uber.org/zap"
 	"nexus/internal/repository"
+	"nexus/vfs/local"
 )
 
 type UploadParam struct {
 	fx.In
-	*minio.Client
+	*local.VFS
+	//*minio.Client
 	*zap.Logger
 	*repository.FileResourceRepository
 }
 
 func NewUpload(param UploadParam) *Upload {
 	return &Upload{
-		Client:                 param.Client,
+		vfs:                    param.VFS,
 		Logger:                 param.Logger,
 		FileResourceRepository: param.FileResourceRepository,
 	}

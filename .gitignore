@@ -99,3 +99,6 @@ dist
 *.out
 !go.work
 *.db
+output
+
+*storybook.log

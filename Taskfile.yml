@@ -2,7 +2,6 @@
 
 version: '3'
 
-
 vars:
   OUTPUT: output
   BINARY_WINDOWS: nexus.exe
@@ -12,16 +11,16 @@ vars:
 tasks:
   default:
     cmds:
-      - go build -ldflags "-s -w" -o {{.OUTPUT}}/{{.BINARY_WINDOWS}}
+      - go build -ldflags "-s -w" -o {{.OUTPUT}}/{{.BINARY_WINDOWS}} ./mods/server
     silent: true
 
   linux:
     cmds:
-      - GOOS=linux GOARCH=amd64 go build -ldflags "-s -w" -o {{.OUTPUT}}/{{.BINARY_UNIX}}
+      - GOOS=linux GOARCH=amd64 go build -ldflags "-s -w" -o {{.OUTPUT}}/{{.BINARY_UNIX}} ./mods/server
 
   macos:
     cmds:
-      - GOOS=darwin GOARCH=arm64 go build -ldflags "-s -w" -o {{.OUTPUT}}/{{.BINARY_UNIX}}
+      - GOOS=darwin GOARCH=arm64 go build -ldflags "-s -w" -o {{.OUTPUT}}/{{.BINARY_UNIX}} ./mods/server
 
   clean:
     cmds:

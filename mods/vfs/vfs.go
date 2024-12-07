@@ -1,6 +1,7 @@
 package vfs
 
 import (
+	"io"
 	"io/fs"
 )
 
@@ -10,10 +11,21 @@ type VFS interface {
 	fs.ReadFileFS
 	fs.StatFS
 	fs.SubFS
-	ListDir(path string) ([]File, error)       // 列出目录内容
-	Mkdir(path string, perm fs.FileMode) error // 创建目录
-	Exists(path string) (bool, error)          // 检查文件或目录是否存在
-	Copy(srcPath, destPath string) error       // 复制文件
-	Move(srcPath, destPath string) error       // 移动文件
-	Close() error
+	io.Closer
+	ListDir(path string) ([]File, error)
+	Mkdir(path string, perm fs.FileMode) error
+	Exists(path string) (bool, error)
+	Copy(srcPath, destPath string) error
+	Move(srcPath, destPath string) error
+	Create(path string) (io.WriteCloser, error)
+	Remove(path string) error
+	Rename(oldPath, newPath string) error
+	Truncate(path string, size int64) error
+	WriteFile(path string, data []byte, perm fs.FileMode) error
+	Chmod(path string, perm fs.FileMode) error
+	Chown(path string, user, group string) error
+	GetFileInfo(path string) (fs.FileInfo, error)
+	RemoveAll(path string) error
+	Symlink(target, link string) error
+	ReadSymlink(path string) (string, error)
 }

@@ -6,12 +6,8 @@ import (
 	"go.uber.org/fx"
 	"go.uber.org/zap"
 	"gorm.io/gorm"
-	"gorm.io/gorm/logger"
-	"log"
 	"nexus/internal/conf"
 	"nexus/internal/entity"
-	"os"
-	"time"
 )
 
 var Module = fx.Module("db",
@@ -19,20 +15,17 @@ var Module = fx.Module("db",
 	fx.Invoke(databaseLifecycle, registerSnowflakeCallback),
 )
 
-func newDatabase(config *conf.DatabaseConfig) *gorm.DB {
+type DatabaseParam struct {
+	fx.In
+	Config *conf.DatabaseConfig
+	*zap.Logger
+}
+
+func newDatabase(param DatabaseParam) *gorm.DB {
+	config, logger := param.Config, param.Logger
 	connection := lo.Must1(config.GetConnection())
-	newLogger := logger.New(
-		log.New(os.Stdout, "\r\n", log.LstdFlags), // io writer
-		logger.Config{
-			SlowThreshold:             time.Second, // Slow SQL threshold
-			LogLevel:                  logger.Info, // Log level
-			IgnoreRecordNotFoundError: true,        // Ignore ErrRecordNotFound error for logger
-			ParameterizedQueries:      true,        // Don't include params in the SQL log
-			Colorful:                  true,        // Disable color
-		},
-	)
 	db := lo.Must1(gorm.Open(connection, &gorm.Config{
-		Logger: newLogger,
+		Logger: newGormZapAdapter(logger),
 	}))
 	return db
 }

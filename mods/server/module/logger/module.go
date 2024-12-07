@@ -1,27 +1,34 @@
 package logger
 
 import (
+	"context"
 	"go.uber.org/fx"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 	"gopkg.in/natefinch/lumberjack.v2"
 	"nexus/internal/conf"
 	"os"
+	"path"
 )
 
-var Module = fx.Module("logger", fx.Provide(newLogger))
+var Module = fx.Module("logger",
+	fx.Provide(
+		newLogger,
+		newSugaredLogger,
+	),
+	fx.Invoke(sync),
+)
 
 type Params struct {
 	fx.In
-	Config *conf.LoggingConfig
+	Config *conf.FileConfig
 }
 
 func newLogger(params Params) *zap.Logger {
-	loggerConfig := params.Config
 	stdout := zapcore.AddSync(os.Stdout)
-
+	filename := path.Join(params.Config.Data, "log", "nexus.log")
 	file := zapcore.AddSync(&lumberjack.Logger{
-		Filename:   loggerConfig.Path,
+		Filename:   filename,
 		MaxSize:    3, // megabytes
 		MaxBackups: 3,
 		MaxAge:     7, // days
@@ -50,6 +57,10 @@ func newLogger(params Params) *zap.Logger {
 	return zap.New(core)
 }
 
+func newSugaredLogger(logger *zap.Logger) *zap.SugaredLogger {
+	return logger.Sugar()
+}
+
 func lowerCaseLevelEncoder(
 	level zapcore.Level,
 	enc zapcore.PrimitiveArrayEncoder,
@@ -60,4 +71,12 @@ func lowerCaseLevelEncoder(
 	}
 
 	zapcore.LowercaseLevelEncoder(level, enc)
+}
+
+func sync(lc fx.Lifecycle, logger *zap.Logger) {
+	lc.Append(fx.Hook{
+		OnStop: func(ctx context.Context) error {
+			return logger.Sync()
+		},
+	})
 }

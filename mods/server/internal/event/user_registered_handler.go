@@ -4,17 +4,19 @@ import (
 	goeventbus "github.com/stanipetrosyan/go-eventbus"
 	"go.uber.org/fx"
 	"go.uber.org/zap"
+	"io/fs"
 	"nexus/internal/constant"
 	"nexus/internal/entity"
-	"nexus/internal/fs"
 	"nexus/internal/repository"
+	"nexus/vfs/local"
 )
 
 type UserRegisteredConsumerParam struct {
 	fx.In
 	goeventbus.EventBus
 	*zap.Logger
-	*fs.Wrapper
+	//*fs.Wrapper
+	*local.VFS
 	*repository.FolderRepository
 }
 
@@ -26,10 +28,9 @@ func UserRegisteredConsumer(param UserRegisteredConsumerParam) {
 	param.Channel(constant.UserRegistered).Subscriber().Listen(func(context goeventbus.Context) {
 		user := context.Result().Data.(entity.User)
 		param.Info("Register", zap.Any("user", user))
-		err := param.CreateBucket(user.Email)
+		err := param.Mkdir(user.Email, fs.ModeDir)
 		if err != nil {
-			param.Error("CreateBucket", zap.Error(err))
-			return
+			param.Error("Create Directory", zap.Error(err))
 		}
 	})
 }

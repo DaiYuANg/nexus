@@ -6,12 +6,10 @@ require (
 	github.com/BurntSushi/toml v1.4.0
 	github.com/adrg/xdg v0.5.3
 	github.com/ansrivas/fiberprometheus/v2 v2.7.0
-	github.com/codingsince1985/checksum v1.3.0
 	github.com/dgraph-io/ristretto v0.2.0
 	github.com/domodwyer/mailyak/v3 v3.6.2
 	github.com/eko/gocache/lib/v4 v4.1.6
 	github.com/eko/gocache/store/ristretto/v4 v4.2.2
-	github.com/gabriel-vasile/mimetype v1.4.7
 	github.com/go-co-op/gocron/v2 v2.12.4
 	github.com/gofiber/contrib/fiberzap/v2 v2.1.4
 	github.com/gofiber/contrib/jwt v1.0.10
@@ -59,6 +57,7 @@ require (
 	github.com/fasthttp/websocket v1.5.8 // indirect
 	github.com/fatih/color v1.16.0 // indirect
 	github.com/fatih/structs v1.1.0 // indirect
+	github.com/gabriel-vasile/mimetype v1.4.7 // indirect
 	github.com/go-ini/ini v1.67.0 // indirect
 	github.com/go-ole/go-ole v1.3.0 // indirect
 	github.com/go-sql-driver/mysql v1.7.0 // indirect
