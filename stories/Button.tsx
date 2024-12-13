@@ -1,7 +1,5 @@
-import React from 'react';
-
+import { CloseButton } from '@mantine/core';
 import './button.css';
-
 export interface ButtonProps {
   /** Is this the principal call to action on the page? */
   primary?: boolean;
@@ -16,13 +14,7 @@ export interface ButtonProps {
 }
 
 /** Primary UI component for user interaction */
-export const Button = ({
-  primary = false,
-  size = 'medium',
-  backgroundColor,
-  label,
-  ...props
-}: ButtonProps) => {
+export const Button = ({ primary = false, size = 'medium', backgroundColor, label, ...props }: ButtonProps) => {
   const mode = primary ? 'storybook-button--primary' : 'storybook-button--secondary';
   return (
     <button
@@ -31,6 +23,7 @@ export const Button = ({
       style={{ backgroundColor }}
       {...props}
     >
+      <CloseButton></CloseButton>
       {label}
     </button>
   );

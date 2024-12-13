@@ -38,6 +38,10 @@ func (v *VFS) WriteFile(path string, data []byte) error {
 	return file.Close()
 }
 
+func fileMetadata() {
+
+}
+
 func (v *VFS) OpenOrCreate(path string) (afero.File, error) {
 	_, err := v.Fs.Stat(path)
 	if err != nil {

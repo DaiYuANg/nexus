@@ -20,7 +20,7 @@ type VfsConfig struct {
 
 func New(config VfsConfig) (*VFS, error) {
 	var localFs = afero.NewBasePathFs(afero.NewOsFs(), config.BasePath)
-	databasePath := path.Join(config.BasePath, InternalDatabasePath)
+	databasePath := path.Join(config.BasePath, meta)
 	var dbOption = badger.DefaultOptions(databasePath)
 	dbOption.Logger = newBadgerZapLoggerAdapter(config.SugaredLogger)
 	db, err := badger.Open(dbOption)
@@ -45,7 +45,7 @@ func New(config VfsConfig) (*VFS, error) {
 		if err != nil {
 			return err
 		}
-		if d.Name() == InternalDatabasePath {
+		if d.Name() == meta {
 			return nil
 		}
 		if lo.Contains(config.IgnoreWatch, d.Name()) {

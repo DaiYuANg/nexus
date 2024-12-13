@@ -1,5 +1,5 @@
 package local
 
 const (
-	InternalDatabasePath = "nexus_local_fs_db"
+	meta = ".nexus_vfs"
 )
