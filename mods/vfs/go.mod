@@ -3,6 +3,7 @@ module nexus/vfs
 go 1.23
 
 require (
+	github.com/adrg/xdg v0.5.3
 	github.com/codingsince1985/checksum v1.3.0
 	github.com/dgraph-io/badger/v4 v4.5.0
 	github.com/fsnotify/fsnotify v1.8.0
@@ -10,7 +11,7 @@ require (
 	github.com/jfjallid/go-smb v0.5.6
 	github.com/minio/minio-go/v7 v7.0.81
 	github.com/pkg/sftp v1.13.7
-	github.com/samber/mo v1.13.0
+	github.com/samber/lo v1.47.0
 	github.com/spf13/afero v1.11.0
 	github.com/studio-b12/gowebdav v0.9.0
 	go.uber.org/zap v1.27.0
@@ -34,10 +35,9 @@ require (
 	github.com/minio/md5-simd v1.1.2 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/rs/xid v1.6.0 // indirect
-	github.com/stretchr/testify v1.10.0 // indirect
 	go.opencensus.io v0.24.0 // indirect
 	go.uber.org/multierr v1.11.0 // indirect
-	golang.org/x/crypto v0.30.0 // indirect
+	golang.org/x/crypto v0.31.0 // indirect
 	golang.org/x/net v0.32.0 // indirect
 	golang.org/x/sys v0.28.0 // indirect
 	golang.org/x/text v0.21.0 // indirect
