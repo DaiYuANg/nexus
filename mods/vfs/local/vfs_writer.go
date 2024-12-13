@@ -23,23 +23,25 @@ func (v *VFS) WriteFile(path string, data []byte) error {
 		return err
 	}
 
-	go func() {
-		mimetype.DetectFile(path)
-		checksum.MD5sum(path)
-		err = v.DB.Update(func(txn *badger.Txn) error {
-			e := badger.NewEntry([]byte("answer"), []byte("42"))
-			return txn.SetEntry(e)
-		})
-	}()
+	detectFile, err := mimetype.DetectFile(path)
+	if err != nil {
+		return err
+	}
+	v.Info("detect file %s", detectFile.String())
+	sum, err := checksum.MD5sum(path)
+	v.Info("MD5 sum %s", sum)
+	if err != nil {
+		return err
+	}
+	err = v.DB.Update(func(txn *badger.Txn) error {
+		e := badger.NewEntry([]byte("answer"), []byte("42"))
+		return txn.SetEntry(e)
+	})
 	err = file.Sync()
 	if err != nil {
 		return err
 	}
 	return file.Close()
-}
-
-func fileMetadata() {
-
 }
 
 func (v *VFS) OpenOrCreate(path string) (afero.File, error) {

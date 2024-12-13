@@ -19,55 +19,30 @@ type VfsConfig struct {
 }
 
 func New(config VfsConfig) (*VFS, error) {
-	var localFs = afero.NewBasePathFs(afero.NewOsFs(), config.BasePath)
-	databasePath := path.Join(config.BasePath, meta)
-	var dbOption = badger.DefaultOptions(databasePath)
-	dbOption.Logger = newBadgerZapLoggerAdapter(config.SugaredLogger)
-	db, err := badger.Open(dbOption)
+	// Step 1: Create the file system
+	localFs := createFs(config)
+
+	// Step 2: Open Badger DB
+	db, err := createDatabase(config.BasePath, config.SugaredLogger)
 	if err != nil {
 		return nil, err
 	}
 
-	watcher, err := fsnotify.NewWatcher()
+	// Step 3: Create and configure file system watcher
+	watcher, err := createWatcher(config.BasePath)
 	if err != nil {
 		return nil, err
 	}
 
-	err = watcher.Add(config.BasePath)
+	// Step 4: Add directories to watcher
+	err = addDirectoriesToWatcher(config.BasePath, config.IgnoreWatch, watcher, config.SugaredLogger)
 	if err != nil {
 		return nil, err
 	}
 
-	err = filepath.WalkDir(config.BasePath, func(path string, d fs.DirEntry, err error) error {
-		if path == config.BasePath {
-			return nil
-		}
-		if err != nil {
-			return err
-		}
-		if d.Name() == meta {
-			return nil
-		}
-		if lo.Contains(config.IgnoreWatch, d.Name()) {
-			return nil
-		}
-		if d.IsDir() {
-			config.Info("Watch", zap.String("path", path))
-			return watcher.Add(path)
-		}
-		return nil
-	})
-	if err != nil {
-		return nil, err
-	}
-	var handler ChangeHandler
-	if config.ChangeHandler != nil {
-		handler = config.ChangeHandler
-	} else {
-		handler = func(op fsnotify.Op, filename string) {
-			config.SugaredLogger.Infof("File %s, %s", op, filename)
-		}
-	}
+	// Step 5: Set up a change handler
+	handler := setupChangeHandler(config)
+
 	return &VFS{
 		config.SugaredLogger,
 		watcher,
@@ -75,4 +50,61 @@ func New(config VfsConfig) (*VFS, error) {
 		db,
 		handler,
 	}, nil
+}
+
+// createFs creates and returns a new file system with the given base path.
+func createFs(config VfsConfig) afero.Fs {
+	return afero.NewBasePathFs(afero.NewOsFs(), config.BasePath)
+}
+
+// createDatabase initializes and opens the Badger database.
+func createDatabase(basePath string, logger *zap.SugaredLogger) (*badger.DB, error) {
+	databasePath := path.Join(basePath, meta)
+	options := badger.DefaultOptions(databasePath)
+	options.Logger = newBadgerZapLoggerAdapter(logger)
+	return badger.Open(options)
+}
+
+// createWatcher initializes and returns a file system watcher.
+func createWatcher(basePath string) (*fsnotify.Watcher, error) {
+	watcher, err := fsnotify.NewWatcher()
+	if err != nil {
+		return nil, err
+	}
+
+	err = watcher.Add(basePath)
+	if err != nil {
+		return nil, err
+	}
+	return watcher, nil
+}
+
+// addDirectoriesToWatcher walks through the base path and adds directories to the watcher.
+func addDirectoriesToWatcher(
+	basePath string,
+	ignoreWatch []string,
+	watcher *fsnotify.Watcher,
+	logger *zap.SugaredLogger,
+) error {
+	return filepath.WalkDir(basePath, func(path string, d fs.DirEntry, err error) error {
+		if path == basePath || err != nil || d.Name() == meta || lo.Contains(ignoreWatch, d.Name()) {
+			return nil
+		}
+
+		if d.IsDir() {
+			logger.Info("Watch", zap.String("path", path))
+			return watcher.Add(path)
+		}
+		return nil
+	})
+}
+
+// setupChangeHandler sets up a default or custom change handler.
+func setupChangeHandler(config VfsConfig) ChangeHandler {
+	if config.ChangeHandler != nil {
+		return config.ChangeHandler
+	}
+	return func(op fsnotify.Op, filename string) {
+		config.SugaredLogger.Infof("File %s, %s", op, filename)
+	}
 }
