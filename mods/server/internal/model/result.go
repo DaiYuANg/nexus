@@ -7,7 +7,7 @@ import (
 
 type R[T any] struct {
 	Code string `json:"code"`
-	Data T      `json:"data"`
+	Data T      `json:"data,omitempty" swaggerignore:"true"`
 }
 
 func Ok[T any](data T) R[T] {
