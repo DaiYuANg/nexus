@@ -7,4 +7,6 @@ use (
 	translate
 	website
 	mods/vfs
+	mods/plugin_chat
+	mods/nexus_plugin
 )
