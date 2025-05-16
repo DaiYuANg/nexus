@@ -1,0 +1,6 @@
+[package]
+name = "metadata_storer"
+version.workspace = true
+edition.workspace = true
+
+[dependencies]

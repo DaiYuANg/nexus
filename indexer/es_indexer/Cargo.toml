@@ -1,0 +1,7 @@
+[package]
+name = "es_indexer"
+version.workspace = true
+edition.workspace = true
+
+[dependencies]
+elasticsearch = "9.0.0-alpha.1"

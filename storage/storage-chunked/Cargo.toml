@@ -1,0 +1,10 @@
+[package]
+name = "storage-chunked"
+version.workspace = true
+edition.workspace = true
+
+[dependencies]
+storage-core = { path = "../storage-core" }
+async-trait = { workspace = true }
+anyhow = { workspace = true }
+blake3 = "1.8.2"

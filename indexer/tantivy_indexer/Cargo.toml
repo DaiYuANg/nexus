@@ -1,0 +1,8 @@
+[package]
+name = "tantivy_indexer"
+version.workspace = true
+edition.workspace = true
+
+[dependencies]
+tantivy = "0.24.1"
+tokio = { workspace = true, features = ["default", "macros", "rt-multi-thread", "sync", "time"] }

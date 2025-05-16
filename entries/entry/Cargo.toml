@@ -1,0 +1,9 @@
+[package]
+name = "entry"
+version.workspace = true
+edition.workspace = true
+
+[dependencies]
+serde = { workspace = true, features = ["derive"] }
+async-trait = { workspace = true }
+anyhow = { workspace = true }
