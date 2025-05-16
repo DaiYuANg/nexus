@@ -1,53 +1,62 @@
-use std::net::SocketAddr;
-use std::sync::Arc;
-use axum::Router;
-use axum::routing::get;
-use crate::indexer::indexer::IndexService;
+use crate::app_state::AppState;
+use crate::config::Config;
+use crate::entry::EntryService;
+use crate::entry::http::HttpService;
+use crate::entry::tcp::TcpService;
+use figment::Figment;
+use figment::providers::{Env, Format, Serialized, Toml};
+use tracing::{error, info};
 
-mod storage_strategy;
+mod app_state;
+mod config;
+mod entry;
 mod indexer;
 mod repository;
+mod storage;
 
-fn init(){
-  // initialize tracing
-  tracing_subscriber::fmt::init();
-  // dotenvy::dotenv_override().unwrap();
+fn init() -> Config {
+  tracing_subscriber::fmt()
+    .with_max_level(tracing::Level::DEBUG)
+    .init();
+  dotenvy::dotenv().ok();
+  let config: Config = Figment::new()
+    .merge(Serialized::defaults(Config {
+      debug: false,
+      port: 8080,
+    }))
+    .merge(Toml::file("config.toml").nested())
+    .merge(Env::prefixed("STORIX_"))
+    .extract()
+    .expect("Failed to load config");
+
+  config
 }
 
 #[tokio::main]
-async fn main() {
-  init();
-  // 创建索引服务实例
-  let index_service = Arc::new(IndexService::new());
+async fn main() -> anyhow::Result<()> {
+  let _config = init();
 
-  // 克隆引用，传给后台任务
-  let index_service_task = index_service.clone();
+  let state = AppState {};
 
-  // 启动索引后台任务
-  let index_handle = tokio::spawn(async move {
-    index_service_task.run().await;
+  let services: Vec<Box<dyn EntryService>> = vec![
+    Box::new(HttpService {
+      addr: "0.0.0.0:8080".parse()?,
+      app_state: state.clone(),
+    }),
+    Box::new(TcpService {
+      addr: "0.0.0.0:9090".parse()?,
+      app_state: state.clone(),
+    }),
+  ];
+
+  let handles = services.into_iter().map(|svc| {
+    tokio::spawn(async move {
+      info!("Starting service: {}", svc.name());
+      if let Err(e) = svc.start().await {
+        error!("Service {} failed: {:?}", svc.name(), e);
+      }
+    })
   });
-
-  // 构建简单的 axum 路由
-  let app = Router::new().route("/", get(|| async { "Hello, file db!" }));
-
-  // 绑定地址
-  let addr = SocketAddr::from(([127, 0, 0, 1], 3000));
-  println!("HTTP Listen {}", addr);
-
-  // 启动 HTTP 服务器任务 (这是一个永远运行的 Future)
-  let listener = tokio::net::TcpListener::bind("0.0.0.0:3000").await.unwrap();
-  let server_handle = axum::serve(listener, app);
-
-  // 这里演示等待两个任务，你可以改为响应信号优雅退出等
-  tokio::select! {
-        _ = index_handle => {
-            println!("Indexer shutdown");
-        }
-        _ = server_handle => {
-            println!("HTTP shutdown");
-        }
-    }
-
-  println!("主进程退出");
+  futures::future::join_all(handles).await;
+  Ok(())
 }

@@ -19,15 +19,15 @@ impl IndexService {
 
     loop {
       tokio::select! {
-                _ = self.shutdown_notify.notified() => {
-                    println!("索引服务收到关闭信号，准备退出");
-                    break;
-                }
-                _ = sleep(Duration::from_secs(5)) => {
-                    println!("索引服务执行周期性任务，比如构建/维护索引");
-                    // 这里写索引处理逻辑
-                }
-            }
+          _ = self.shutdown_notify.notified() => {
+              println!("索引服务收到关闭信号，准备退出");
+              break;
+          }
+          _ = sleep(Duration::from_secs(5)) => {
+              println!("索引服务执行周期性任务，比如构建/维护索引");
+              // 这里写索引处理逻辑
+          }
+      }
     }
 
     println!("索引服务退出");

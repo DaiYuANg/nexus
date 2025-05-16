@@ -1,41 +1,41 @@
-use sled::{Db, IVec};
-use serde::{Serialize, Deserialize};
 use anyhow::{Result, anyhow};
+use redb::Database;
+use serde::{Deserialize, Serialize};
 
 // 你的文件元数据结构
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct FileMeta {
-  pub id: String,      // 唯一标识
-  pub filename: String,
-  pub size: u64,
-  // 其他元数据字段
+    pub id: String, // 唯一标识
+    pub filename: String,
+    pub size: u64,
+    // 其他元数据字段
 }
 
 // 定义 Repository trait
 #[async_trait::async_trait]
 pub trait FileMetaRepository {
-  async fn insert(&self, meta: FileMeta) -> Result<()>;
-  async fn get(&self, id: &str) -> Result<Option<FileMeta>>;
-  async fn delete(&self, id: &str) -> Result<()>;
-  // 更多方法按需扩展
+    async fn insert(&self, meta: FileMeta) -> Result<()>;
+    async fn get(&self, id: &str) -> Result<Option<FileMeta>>;
+    async fn delete(&self, id: &str) -> Result<()>;
+    // 更多方法按需扩展
 }
 
 // sled 实现
 pub struct SledFileMetaRepository {
-  db: Db,
+    db: Database,
 }
 
 impl SledFileMetaRepository {
-  pub fn new(db: Db) -> Self {
-    Self { db }
-  }
+    pub fn new(db: Database) -> Self {
+        Self { db }
+    }
 }
 
 // 方便序列化/反序列化
 // fn serialize(meta: &FileMeta) -> Result<Vec<u8>> {
 //   Ok(bincode::serialize(meta)?)
 // }
-// 
+//
 // fn deserialize(bytes: &[u8]) -> Result<FileMeta> {
 //   Ok(bincode::deserialize(bytes)?)
 // }
@@ -55,7 +55,7 @@ impl SledFileMetaRepository {
 //     //   .await?
 //     //   .map_err(|e| anyhow!("sled insert error: {}", e))
 //   }
-// 
+//
 //   async fn get(&self, id: &str) -> Result<Option<FileMeta>> {
 //     let key = id.as_bytes();
 //     let db = self.db.clone();
@@ -71,7 +71,7 @@ impl SledFileMetaRepository {
 //       .await?
 //       .map_err(|e| anyhow!("sled get error: {}", e))
 //   }
-// 
+//
 //   async fn delete(&self, id: &str) -> Result<()> {
 //     let key = id.as_bytes();
 //     let db = self.db.clone();
