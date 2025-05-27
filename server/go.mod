@@ -2,11 +2,6 @@ module github.com/DaiYuANg/storix/server
 
 go 1.24.3
 
-tool (
-	github.com/air-verse/air
-	github.com/go-task/task/v3/cmd/task
-)
-
 require (
 	github.com/blevesearch/bleve v1.0.14
 	github.com/go-co-op/gocron/v2 v2.16.2
