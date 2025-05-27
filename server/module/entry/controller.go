@@ -17,6 +17,11 @@ var controllerModule = fx.Module("controller_module",
 			fx.As(new(Controller)),
 			fx.ResultTags(`group:"controllers"`),
 		),
+		fx.Annotate(
+			newNamespaceController,
+			fx.As(new(Controller)),
+			fx.ResultTags(`group:"controllers"`),
+		),
 	),
 	fx.Invoke(bindingController))
 

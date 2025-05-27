@@ -4,14 +4,14 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
-type UploadController struct {
+type uploadController struct {
 }
 
-func (u UploadController) RegisterRoutes(app *fiber.App) {
-	app.Post("/upload", u.Upload)
+func (u uploadController) RegisterRoutes(app *fiber.App) {
+	app.Post("/upload/:namespace", u.Upload)
 }
 
-func (u UploadController) Upload(c *fiber.Ctx) error {
+func (u uploadController) Upload(c *fiber.Ctx) error {
 	file, err := c.FormFile("file")
 	if err != nil {
 		return err
@@ -26,6 +26,6 @@ func (u UploadController) Upload(c *fiber.Ctx) error {
 	return c.SendString("upload ok: " + file.Filename)
 }
 
-func newUploadController() *UploadController {
-	return &UploadController{}
+func newUploadController() *uploadController {
+	return &uploadController{}
 }

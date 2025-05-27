@@ -159,7 +159,6 @@ ClientBin/
 orleans.codegen.cs
 Generated_Code/
 _UpgradeReport_Files/
-Backup*/
 UpgradeLog*.XML
 UpgradeLog*.htm
 ServiceFabricBackup/
@@ -227,8 +226,6 @@ FodyWeavers.xsd
 *.dylib
 *.test
 *.out
-go.work
-go.work.sum
 .env
 .idea/**/workspace.xml
 .idea/**/tasks.xml
@@ -285,3 +282,4 @@ Icon
 Network Trash Folder
 Temporary Items
 .apdisk
+*.db
