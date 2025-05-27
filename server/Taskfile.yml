@@ -3,10 +3,19 @@
 version: '3'
 
 vars:
-  GREETING: Hello, World!
+  APP_NAME: storix
+  DIST_DIR: dist
+  VERSION: 0.0.1
+  GIT_COMMIT:
+    sh: git rev-parse --short HEAD
 
 tasks:
-  default:
+  build:
     cmds:
-      - echo "{{.GREETING}}"
-    silent: true
+      - GOOS={{OS}} GOARCH={{ARCH}} go build -trimpath -ldflags="-s -w" -o {{.DIST_DIR}}/{{.APP_NAME}}-{{.VERSION}}-{{OS}}-{{ARCH}} .
+      - |
+        if [ "{{OS}}" != "darwin" ]; then
+          upx -9 {{.DIST_DIR}}/{{.APP_NAME}}-{{.VERSION}}-{{OS}}-{{ARCH}}
+        else
+          echo "Skipping upx on macOS"
+        fi

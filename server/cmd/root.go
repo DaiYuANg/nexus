@@ -1,15 +1,16 @@
 package cmd
 
 import (
-	"github.com/DaiYuANg/storix/server/module/auth"
-	"github.com/DaiYuANg/storix/server/module/config"
-	"github.com/DaiYuANg/storix/server/module/entry"
-	"github.com/DaiYuANg/storix/server/module/indexer"
-	"github.com/DaiYuANg/storix/server/module/logger"
-	"github.com/DaiYuANg/storix/server/module/metadata"
-	"github.com/DaiYuANg/storix/server/module/namespace"
-	"github.com/DaiYuANg/storix/server/module/schedule"
-	"github.com/DaiYuANg/storix/server/module/storage"
+	"github.com/DaiYuANg/storix/server/internal/auth"
+	"github.com/DaiYuANg/storix/server/internal/config"
+	"github.com/DaiYuANg/storix/server/internal/http"
+	"github.com/DaiYuANg/storix/server/internal/indexer"
+	"github.com/DaiYuANg/storix/server/internal/internal_store"
+	"github.com/DaiYuANg/storix/server/internal/logger"
+	"github.com/DaiYuANg/storix/server/internal/namespace"
+	"github.com/DaiYuANg/storix/server/internal/schedule"
+	"github.com/DaiYuANg/storix/server/internal/storage"
+	"github.com/DaiYuANg/storix/server/internal/tcp"
 	"go.uber.org/fx"
 	"go.uber.org/fx/fxevent"
 	"go.uber.org/zap"
@@ -19,9 +20,9 @@ func Run() {
 	fx.New(
 		config.Module,
 		logger.Module,
-		entry.HttpModule,
-		entry.TcpModule,
-		metadata.Module,
+		http.Module,
+		tcp.Module,
+		internal_store.Module,
 		indexer.Module,
 		storage.Module,
 		namespace.Module,

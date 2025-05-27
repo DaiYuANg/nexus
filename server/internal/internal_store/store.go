@@ -1,4 +1,4 @@
-package metadata
+package internal_store
 
 type Store interface {
 	Put(bucket string, key []byte, value []byte) error

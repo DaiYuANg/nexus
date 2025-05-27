@@ -1,4 +1,4 @@
-package metadata
+package internal_store
 
 import "time"
 

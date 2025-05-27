@@ -1,6 +1,9 @@
 package namespace
 
-import "time"
+import (
+	"github.com/samber/lo"
+	"time"
+)
 
 type StorageBackendType string
 
@@ -23,9 +26,9 @@ type Namespace struct {
 	Name           string
 	Description    string
 	AllowDuplicate bool
-	OwnerID        string    // 拥有者用户ID，方便权限管理
-	CreatedAt      time.Time // 创建时间
-	UpdatedAt      time.Time // 更新时间
+	OwnerID        string
+	CreatedAt      time.Time
+	UpdatedAt      time.Time
 
 	IsActive   bool
 	QuotaBytes int64
@@ -39,4 +42,30 @@ type Namespace struct {
 
 	// 存储模式
 	StorageMode StorageMode `json:"storage_mode"`
+}
+
+func New(name string, opts ...func(*Namespace)) *Namespace {
+	ns := &Namespace{
+		Name:           name,
+		CreatedAt:      time.Now(),
+		IsActive:       true,
+		AllowDuplicate: true,
+	}
+	lo.ForEach(opts, func(opt func(*Namespace), index int) {
+		opt(ns)
+	})
+	return ns
+}
+
+func WithQuota(bytes int64) func(*Namespace) {
+	return func(n *Namespace) {
+		n.QuotaBytes = bytes
+	}
+}
+
+func WithStorage(backend StorageBackendType, config map[string]string) func(*Namespace) {
+	return func(n *Namespace) {
+		n.StorageBackend = backend
+		n.StorageConfig = config
+	}
 }
