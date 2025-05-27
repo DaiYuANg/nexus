@@ -1,7 +1,0 @@
-[package]
-name = "metadata_redb_storer"
-version.workspace = true
-edition.workspace = true
-
-[dependencies]
-redb = "2.5.0"
