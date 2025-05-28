@@ -1,6 +1,11 @@
 package internal_store
 
-import "go.uber.org/zap"
+import (
+	"fmt"
+	"go.uber.org/zap"
+)
+
+const bblotLogPrefix = "[internal_store:bblot]"
 
 type bblotZapLogger struct {
 	suger *zap.SugaredLogger
@@ -11,7 +16,7 @@ func (b bblotZapLogger) Debug(v ...interface{}) {
 }
 
 func (b bblotZapLogger) Debugf(format string, v ...interface{}) {
-	b.suger.Debugf(format, v...)
+	b.suger.Debugf(fmt.Sprintf("%s %s", bblotLogPrefix, format), v...)
 }
 
 func (b bblotZapLogger) Error(v ...interface{}) {
@@ -19,7 +24,7 @@ func (b bblotZapLogger) Error(v ...interface{}) {
 }
 
 func (b bblotZapLogger) Errorf(format string, v ...interface{}) {
-	b.suger.Errorf(format, v...)
+	b.suger.Errorf(fmt.Sprintf("%s %s", bblotLogPrefix, format), v...)
 }
 
 func (b bblotZapLogger) Info(v ...interface{}) {
@@ -27,7 +32,7 @@ func (b bblotZapLogger) Info(v ...interface{}) {
 }
 
 func (b bblotZapLogger) Infof(format string, v ...interface{}) {
-	b.suger.Infof(format, v...)
+	b.suger.Infof(fmt.Sprintf("%s %s", bblotLogPrefix, format), v...)
 }
 
 func (b bblotZapLogger) Warning(v ...interface{}) {
@@ -35,7 +40,7 @@ func (b bblotZapLogger) Warning(v ...interface{}) {
 }
 
 func (b bblotZapLogger) Warningf(format string, v ...interface{}) {
-	b.suger.Warnf(format, v...)
+	b.suger.Warnf(fmt.Sprintf("%s %s", bblotLogPrefix, format), v...)
 }
 
 func (b bblotZapLogger) Fatal(v ...interface{}) {
@@ -43,7 +48,7 @@ func (b bblotZapLogger) Fatal(v ...interface{}) {
 }
 
 func (b bblotZapLogger) Fatalf(format string, v ...interface{}) {
-	b.suger.Fatalf(format, v...)
+	b.suger.Fatalf(fmt.Sprintf("%s %s", bblotLogPrefix, format), v...)
 }
 
 func (b bblotZapLogger) Panic(v ...interface{}) {
@@ -51,5 +56,5 @@ func (b bblotZapLogger) Panic(v ...interface{}) {
 }
 
 func (b bblotZapLogger) Panicf(format string, v ...interface{}) {
-	b.suger.Panicf(format, v...)
+	b.suger.Panicf(fmt.Sprintf("%s %s", bblotLogPrefix, format), v...)
 }

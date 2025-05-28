@@ -3,6 +3,9 @@ go 1.24.3
 use (
 	.
 	server
-	backup-server
+	backup_server
 	ioutil
+	cli
+	gnet_zap_logger
+	badger_bucket
 )

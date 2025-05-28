@@ -72,5 +72,7 @@ func respond[T any](ctx *fiber.Ctx, code int64, message string, data T, opts ...
 }
 
 func generateID() string {
+
 	return uuid.NewString()
+
 }

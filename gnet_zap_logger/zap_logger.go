@@ -1,4 +1,4 @@
-package tcp
+package gnet_zap_logger
 
 import "go.uber.org/zap"
 
@@ -23,6 +23,6 @@ func (l *ZapLogger) Errorf(format string, args ...interface{}) {
 	l.logger.Errorf(format, args...)
 }
 
-func newZapLogger(logger *zap.SugaredLogger) *ZapLogger {
+func NewZapLogger(logger *zap.SugaredLogger) *ZapLogger {
 	return &ZapLogger{logger: logger}
 }

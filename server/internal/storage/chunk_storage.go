@@ -1,9 +1,11 @@
 package storage
 
 import (
+	"encoding/binary"
 	"fmt"
 	"github.com/dgraph-io/badger/v4"
 	"github.com/google/uuid"
+	"github.com/influxdata/influxdb/pkg/snowflake"
 	"go.uber.org/zap"
 	"io"
 	"mime/multipart"
@@ -28,7 +30,8 @@ type FileMeta struct {
 const ChunkSize = 5 * 1024 * 1024
 
 type FileChunker struct {
-	store *badger.DB
+	store       *badger.DB
+	idGenerator *snowflake.Generator
 }
 
 func (f FileChunker) ChunkSave(header *multipart.FileHeader, ns string, logger *zap.SugaredLogger) (int, error) {
@@ -46,8 +49,7 @@ func (f FileChunker) ChunkSave(header *multipart.FileHeader, ns string, logger *
 	buf := make([]byte, ChunkSize)
 	part := 0
 
-	txn := f.store.NewTransaction(true)
-
+	var keys []string
 	for {
 		n, err := file.Read(buf)
 		if err != nil && err != io.EOF {
@@ -58,21 +60,39 @@ func (f FileChunker) ChunkSave(header *multipart.FileHeader, ns string, logger *
 		}
 
 		chunkKey := fmt.Sprintf("%s-chunk-%d", fileKey, part)
+		keys = append(keys, chunkKey)
 		chunkPath := path.Join(chunkDir, fmt.Sprintf("chunk_%d", part))
 		logger.Debugf("uploading chunk: %s", chunkPath)
-
-		err = txn.Set([]byte(chunkKey), buf[:n])
 
 		if writeErr := os.WriteFile(chunkPath, buf[:n], 0644); writeErr != nil {
 			return 0, writeErr
 		}
 
-		err = txn.Commit()
-
 		if err != nil {
 			return 0, err
 		}
 		part++
+	}
+
+	id := f.idGenerator.Next()
+
+	logger.Debugf("uploading chunk: %d", id)
+
+	buf = make([]byte, 8)
+
+	binary.BigEndian.PutUint64(buf, id)
+
+	err = f.store.Update(func(txn *badger.Txn) error {
+		for _, key := range keys {
+			err := txn.Set(buf, []byte(key))
+			if err != nil {
+				return err
+			}
+		}
+		return nil
+	})
+	if err != nil {
+		return 0, err
 	}
 	return part, nil
 }

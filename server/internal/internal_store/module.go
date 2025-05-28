@@ -17,6 +17,7 @@ var Module = fx.Module("internal_store",
 		newBblot,
 		newBadger,
 	),
+	lifecycle,
 )
 
 const (
@@ -46,7 +47,11 @@ func snowflakeId() *snowflake.Generator {
 func newBadger(storePath string, suger *zap.SugaredLogger) (*badger.DB, error) {
 	badgerPath := path.Join(storePath, "metadata")
 	logger := &badgerLogger{suger}
-	options := badger.DefaultOptions(badgerPath).WithLogger(logger).WithLoggingLevel(badger.DEBUG)
+	options := badger.
+		DefaultOptions(badgerPath).
+		WithZSTDCompressionLevel(1).
+		WithLoggingLevel(badger.DEBUG).WithLogger(logger)
+	//options.Logger = logger
 	return badger.Open(options)
 }
 

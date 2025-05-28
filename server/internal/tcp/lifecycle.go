@@ -2,13 +2,14 @@ package tcp
 
 import (
 	"context"
+	"github.com/DaiYuANg/storix/gnet_zap_logger"
 	"github.com/panjf2000/gnet/v2"
 	"go.uber.org/fx"
 	"go.uber.org/zap"
 )
 
 func startStorixServer(lc fx.Lifecycle, server *storixServer, logger *zap.SugaredLogger) {
-	myLogger := newZapLogger(logger)
+	myLogger := gnet_zap_logger.NewZapLogger(logger)
 	options := gnet.Options{
 		Multicore: true,
 		Logger:    myLogger,

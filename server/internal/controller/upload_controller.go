@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"fmt"
 	"github.com/DaiYuANg/storix/server/internal/namespace"
 	"github.com/DaiYuANg/storix/server/internal/storage"
 	"github.com/gofiber/fiber/v2"
@@ -26,7 +27,7 @@ func (u UploadController) Upload(c *fiber.Ctx) error {
 	fileHeader, err := c.FormFile("file")
 	if err != nil {
 		u.Errorf("failed to upload file: %v", err)
-		return Fail(c, fiber.StatusInternalServerError, "failed to upload file")
+		return Fail(c, fiber.StatusInternalServerError, fmt.Sprintf("failed to upload file:%s", err.Error()))
 	}
 
 	part, err := u.ChunkSave(fileHeader, ns, u.SugaredLogger)

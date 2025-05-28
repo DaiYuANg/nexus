@@ -19,6 +19,7 @@ func newFiber() *fiber.App {
 	app := fiber.New(
 		fiber.Config{
 			EnablePrintRoutes: true,
+			BodyLimit:         1024 * 1024 * 1024,
 		},
 	)
 	app.Get("/metrics", monitor.New())

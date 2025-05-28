@@ -1,23 +1,28 @@
 package internal_store
 
-import "go.uber.org/zap"
+import (
+	"fmt"
+	"go.uber.org/zap"
+)
+
+const badgerLogPrefix = "[internal_store:badger] "
 
 type badgerLogger struct {
 	sugar *zap.SugaredLogger
 }
 
 func (l *badgerLogger) Errorf(format string, args ...interface{}) {
-	l.sugar.Errorf(format, args...)
+	l.sugar.Errorf(fmt.Sprintf("%s %s", badgerLogPrefix, format), args...)
 }
 
 func (l *badgerLogger) Warningf(format string, args ...interface{}) {
-	l.sugar.Warnf(format, args...)
+	l.sugar.Warnf(fmt.Sprintf("%s %s", badgerLogPrefix, format), args...)
 }
 
 func (l *badgerLogger) Infof(format string, args ...interface{}) {
-	l.sugar.Infof(format, args...)
+	l.sugar.Infof(fmt.Sprintf("%s %s", badgerLogPrefix, format), args...)
 }
 
 func (l *badgerLogger) Debugf(format string, args ...interface{}) {
-	l.sugar.Debugf(format, args...)
+	l.sugar.Debugf(fmt.Sprintf("%s %s", badgerLogPrefix, format), args...)
 }
