@@ -2,10 +2,10 @@ go 1.24.3
 
 use (
 	.
-	server
-	backup_server
-	ioutil
-	cli
-	gnet_zap_logger
-	badger_bucket
+	./app/server
+	./app/backup_server
+	./pkg/ioutil
+	./app/cli
+	./pkg/gnet_zap_logger
+	./pkg/badger_bucket
 )

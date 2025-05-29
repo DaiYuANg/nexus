@@ -285,4 +285,4 @@ Temporary Items
 *.db
 .idea
 dist
-storix_data
+maxio_data

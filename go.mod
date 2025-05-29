@@ -1,4 +1,4 @@
-module github.com/DaiYuANg/storix
+module github.com/DaiYuANg/maxio
 
 go 1.24.3
 
