@@ -1,7 +1,10 @@
 package main
 
-import "github.com/DaiYuANg/storix/server/cmd"
+import (
+	"github.com/DaiYuANg/storix/server/cmd"
+	"github.com/spf13/cobra"
+)
 
 func main() {
-	cmd.Run()
+	cobra.CheckErr(cmd.Execute())
 }

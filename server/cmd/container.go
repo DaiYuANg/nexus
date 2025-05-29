@@ -11,13 +11,14 @@ import (
 	"github.com/DaiYuANg/storix/server/internal/schedule"
 	"github.com/DaiYuANg/storix/server/internal/storage"
 	"github.com/DaiYuANg/storix/server/internal/tcp"
+	"github.com/DaiYuANg/storix/server/internal/worker"
 	"go.uber.org/fx"
 	"go.uber.org/fx/fxevent"
 	"go.uber.org/zap"
 )
 
-func Run() {
-	fx.New(
+func container() *fx.App {
+	return fx.New(
 		config.Module,
 		logger.Module,
 		http.Module,
@@ -28,8 +29,9 @@ func Run() {
 		namespace.Module,
 		schedule.Module,
 		auth.Module,
+		worker.Module,
 		fx.WithLogger(func(log *zap.Logger) fxevent.Logger {
 			return &fxevent.ZapLogger{Logger: log}
 		}),
-	).Run()
+	)
 }
