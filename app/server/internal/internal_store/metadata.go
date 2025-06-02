@@ -3,7 +3,7 @@ package internal_store
 import "time"
 
 type FileMetadata struct {
-	ID          string            // 唯一 ID，可使用 UUID 或自定义 snowflake
+	ID          string            // 唯一 ID
 	Namespace   string            // 所属命名空间
 	Name        string            // 原始文件名
 	Size        int64             // 文件大小（字节）

@@ -1,7 +1,6 @@
-package controller
+package endpoint
 
 import (
-	"fmt"
 	"github.com/DaiYuANg/maxio/server/internal/bucket"
 	"github.com/DaiYuANg/maxio/server/internal/storage"
 	"github.com/gofiber/fiber/v2"
@@ -21,24 +20,26 @@ func (u UploadController) RegisterRoutes(app *fiber.App) {
 func (u UploadController) Upload(c *fiber.Ctx) error {
 	ns := c.Params("bucket")
 	u.Debugf("bucket: %s", ns)
-	if u.Service.NamespaceExists(ns) == false {
+
+	if !u.Service.NamespaceExists(ns) {
 		return Fail(c, fiber.StatusNotFound, "bucket not found")
 	}
+
 	fileHeader, err := c.FormFile("file")
 	if err != nil {
-		u.Errorf("failed to upload file: %v", err)
-		return Fail(c, fiber.StatusInternalServerError, fmt.Sprintf("failed to upload file:%s", err.Error()))
+		u.Errorf("failed to read file: %v", err)
+		return Fail(c, fiber.StatusBadRequest, "invalid file upload")
 	}
 
-	part, err := u.ChunkSave(fileHeader, ns, u.SugaredLogger)
+	chunkCount, err := u.ChunkSave(fileHeader, ns, u.SugaredLogger)
 	if err != nil {
-		u.Errorf("failed to upload file: %v", err)
-		return Fail(c, fiber.StatusInternalServerError, "failed to upload file")
+		u.Errorf("chunk save failed: %v", err)
+		return Fail(c, fiber.StatusInternalServerError, "failed to save file")
 	}
 
 	return Success(c, fiber.Map{
 		"message":    "upload success",
-		"chunkCount": part,
+		"chunkCount": chunkCount,
 	})
 }
 

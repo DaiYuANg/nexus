@@ -8,7 +8,7 @@ import (
 	"go.uber.org/zap"
 )
 
-func startStorixServer(lc fx.Lifecycle, server *server, logger *zap.SugaredLogger) {
+func startServer(lc fx.Lifecycle, server *server, logger *zap.SugaredLogger) {
 	myLogger := gnet_zap_logger.NewZapLogger(logger)
 	options := gnet.Options{
 		Multicore: true,

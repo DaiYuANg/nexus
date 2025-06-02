@@ -1,7 +1,7 @@
 package http
 
 import (
-	"github.com/DaiYuANg/maxio/server/internal/controller"
+	"github.com/DaiYuANg/maxio/server/internal/protocol/http/endpoint"
 	"github.com/go-playground/validator/v10"
 	"github.com/gofiber/fiber/v2"
 	"github.com/samber/lo"
@@ -16,27 +16,27 @@ var controllerModule = fx.Module("controller_module",
 	fx.Provide(
 		newValidator,
 		fx.Annotate(
-			controller.NewUploadController,
+			endpoint.NewUploadController,
 			fx.As(new(Controller)),
 			fx.ResultTags(`group:"controllers"`),
 		),
 		fx.Annotate(
-			controller.NewNamespaceController,
+			endpoint.NewNamespaceController,
 			fx.As(new(Controller)),
 			fx.ResultTags(`group:"controllers"`),
 		),
 		fx.Annotate(
-			controller.NewNamespaceController,
+			endpoint.NewNamespaceController,
 			fx.As(new(Controller)),
 			fx.ResultTags(`group:"controllers"`),
 		),
 		fx.Annotate(
-			controller.NewWebDavController,
+			endpoint.NewWebDavController,
 			fx.As(new(Controller)),
 			fx.ResultTags(`group:"controllers"`),
 		),
 		fx.Annotate(
-			controller.NewViewController,
+			endpoint.NewViewController,
 			fx.As(new(Controller)),
 			fx.ResultTags(`group:"controllers"`),
 		),

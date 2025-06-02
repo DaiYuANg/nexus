@@ -1,4 +1,4 @@
-package controller
+package endpoint
 
 import (
 	"github.com/DaiYuANg/maxio/server/internal/bucket"

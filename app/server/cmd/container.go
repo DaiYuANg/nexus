@@ -4,14 +4,13 @@ import (
 	"github.com/DaiYuANg/maxio/server/internal/auth"
 	"github.com/DaiYuANg/maxio/server/internal/bucket"
 	"github.com/DaiYuANg/maxio/server/internal/config"
-	"github.com/DaiYuANg/maxio/server/internal/http"
 	"github.com/DaiYuANg/maxio/server/internal/indexer"
 	"github.com/DaiYuANg/maxio/server/internal/internal_store"
 	"github.com/DaiYuANg/maxio/server/internal/logger"
+	"github.com/DaiYuANg/maxio/server/internal/protocol"
 	"github.com/DaiYuANg/maxio/server/internal/schedule"
 	"github.com/DaiYuANg/maxio/server/internal/stash"
 	"github.com/DaiYuANg/maxio/server/internal/storage"
-	"github.com/DaiYuANg/maxio/server/internal/tcp"
 	"github.com/DaiYuANg/maxio/server/internal/worker"
 	"go.uber.org/fx"
 	"go.uber.org/fx/fxevent"
@@ -24,8 +23,7 @@ func container() *fx.App {
 		logger.Module,
 		internal_store.Module,
 		stash.Module,
-		http.Module,
-		tcp.Module,
+		protocol.Module,
 		indexer.Module,
 		storage.Module,
 		bucket.Module,
