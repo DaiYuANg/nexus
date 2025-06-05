@@ -8,4 +8,6 @@ use (
 	./app/cli
 	./pkg/gnet_zap_logger
 	./pkg/badger_bucket
+	./pkg/badger_zap_logger
+	./pkg/bbolt_zap_logger
 )

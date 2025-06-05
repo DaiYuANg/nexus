@@ -4,10 +4,10 @@ import (
 	"github.com/DaiYuANg/maxio/server/internal/auth"
 	"github.com/DaiYuANg/maxio/server/internal/bucket"
 	"github.com/DaiYuANg/maxio/server/internal/config"
+	"github.com/DaiYuANg/maxio/server/internal/entry"
 	"github.com/DaiYuANg/maxio/server/internal/indexer"
 	"github.com/DaiYuANg/maxio/server/internal/internal_store"
 	"github.com/DaiYuANg/maxio/server/internal/logger"
-	"github.com/DaiYuANg/maxio/server/internal/protocol"
 	"github.com/DaiYuANg/maxio/server/internal/schedule"
 	"github.com/DaiYuANg/maxio/server/internal/stash"
 	"github.com/DaiYuANg/maxio/server/internal/storage"
@@ -23,7 +23,7 @@ func container() *fx.App {
 		logger.Module,
 		internal_store.Module,
 		stash.Module,
-		protocol.Module,
+		entry.Module,
 		indexer.Module,
 		storage.Module,
 		bucket.Module,

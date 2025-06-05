@@ -1,7 +1,7 @@
 package http
 
 import (
-	"github.com/DaiYuANg/maxio/server/internal/protocol/http/endpoint"
+	"github.com/DaiYuANg/maxio/server/internal/entry/http/endpoint"
 	"github.com/go-playground/validator/v10"
 	"github.com/gofiber/fiber/v2"
 	"github.com/samber/lo"
